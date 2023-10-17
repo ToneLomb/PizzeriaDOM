@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PizzeriaDOM
+namespace PizzeriaDOM.Pages
 {
     /// <summary>
-    /// Logique d'interaction pour Page1.xaml
+    /// Logique d'interaction pour Employee.xaml
     /// </summary>
-    public partial class Page1 : UserControl
+    public partial class Employee : UserControl
     {
-        public Page1()
+        public Employee()
         {
             InitializeComponent();
         }

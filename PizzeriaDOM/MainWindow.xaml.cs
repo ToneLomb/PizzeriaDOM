@@ -25,7 +25,7 @@ namespace PizzeriaDOM
         public MainWindow()
         {
             InitializeComponent();
-            CC.Content = new PizzeriaDOM.Page1();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
         }
 
         private void ToggleButtonClick(ToggleButton selectedButton)
@@ -47,14 +47,20 @@ namespace PizzeriaDOM
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Page1();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
             ToggleButtonClick(button1);
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Page2();
+            CC.Content = new PizzeriaDOM.Pages.Kitchen();
             ToggleButtonClick(button2);
         }
-    }
+
+        private void Employee_Click(object sender, RoutedEventArgs e)
+        {
+            CC.Content = new PizzeriaDOM.Pages.Employee();
+            ToggleButtonClick(Employee);
+		}
+	}
 }
