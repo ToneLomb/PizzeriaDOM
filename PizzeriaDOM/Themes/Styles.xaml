@@ -64,15 +64,5 @@
         </Setter>
     </Style>
     
-    <!-- Style d'un bouton séléctionné-->
-    <Style x:Key="SelectedNavButton" TargetType="{x:Type ToggleButton}">
-        <Setter Property="Background" Value="red"/>
-        <!-- Couleur de sélection -->
-        <Style.Triggers>
-            <Trigger Property="IsPressed" Value="true">
-                <Setter Property="Background" Value="red"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
 
 </ResourceDictionary>
