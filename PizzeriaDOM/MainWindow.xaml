@@ -8,10 +8,8 @@
         Title="MainWindow" 
         Height="450" 
         Width="800"
-        AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        Background="Transparent">
+        >
     <Window.Resources>
 
         <ResourceDictionary>
