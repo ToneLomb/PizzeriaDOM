@@ -27,6 +27,6 @@
                 <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="71">Take a call</TextBlock>
             </StackPanel>
         </Button>
-        <TextBlock HorizontalAlignment="Center" Margin="196,109,196,309">Test</TextBlock>
+        <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" Margin="0,131,0,287" RenderTransformOrigin="0.53,1.201"></TextBlock>
 	</Grid>
 </UserControl>
