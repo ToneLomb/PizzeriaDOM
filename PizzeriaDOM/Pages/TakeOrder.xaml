@@ -6,7 +6,27 @@
              xmlns:local="clr-namespace:PizzeriaDOM.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<Grid Background="#45455F">
-		<TextBlock>TakeOrder</TextBlock>
+
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml"/>
+                <ResourceDictionary Source="../Themes/Geometry.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="#45455F">
+        <StackPanel Margin="0,0,0,384">
+            <Label Style ="{DynamicResource PageTitle}" Width="264" Content="INCOMING CALLS"/>
+        </StackPanel>
+        <Button Style="{DynamicResource BaseButton}" Margin="199,66,199,341" Background="Transparent" Click="takeCall_Click">
+            <StackPanel Orientation="Horizontal">
+                <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
+                <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="71">Take a call</TextBlock>
+            </StackPanel>
+        </Button>
+        <TextBlock HorizontalAlignment="Center" Margin="196,109,196,309">Test</TextBlock>
 	</Grid>
 </UserControl>

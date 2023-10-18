@@ -9,6 +9,10 @@
         Height="450" 
         Width="800"
         WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        ResizeMode="NoResize"
         >
     <Window.Resources>
 
@@ -66,7 +70,7 @@
 
         <!-- Grid.column = ID de la colonne, Fill = couleur -->
 
-        <ContentControl x:Name="CC" Grid.Column="1" Grid.RowSpan="2"/>
+        <ContentControl x:Name="CC" Grid.Column="1"/>
     </Grid>
 
 </Window>
