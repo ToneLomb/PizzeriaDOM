@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace PizzeriaDOM.Pages
     /// </summary>
     public partial class NewEmployeeWindow : Window
     {
+        string selectedText = "";
+
         public NewEmployeeWindow()
         {
             InitializeComponent();
@@ -26,7 +29,17 @@ namespace PizzeriaDOM.Pages
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            //TODO
-		}
-	}
+            Trace.WriteLine(this.selectedText);
+        }
+
+        private void TypeEmployee_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
+            if (selectedItem != null)
+            {
+                this.selectedText = selectedItem.Content.ToString();
+            }
+        }
+    }
 }
