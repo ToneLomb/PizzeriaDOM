@@ -10,8 +10,8 @@
 	<Grid Background="#45455F">
 		<TextBlock Text="Employee" Height="50" VerticalAlignment="Top" TextAlignment="Center" FontSize="25"/>
 
-		<Button Click="NewEmployee_Click" Width="100" Height="30">New Employee</Button>
+		<Button Click="NewEmployee_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">New Employee</Button>
 		
-
+        
 	</Grid>
 </UserControl>
