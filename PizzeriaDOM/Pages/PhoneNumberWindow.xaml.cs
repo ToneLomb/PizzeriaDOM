@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +28,31 @@ namespace PizzeriaDOM.Pages
             InitializeComponent();
         }
 
+        private bool isNumber;
 
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                PhoneNumber = TextPhoneNumber.Text;
-                this.Close();
+                isNumber = true;
+                //Permet de check si toute la chaîne de caractère contient uniquement des digit
+                foreach(char c in TextPhoneNumber.Text)
+                {
+                    if (!Char.IsDigit(c))
+                    {
+                        isNumber = false;
+                    }
+                }
+                if (isNumber)
+                {
+                    PhoneNumber = TextPhoneNumber.Text;
+                    this.Close();
+                }
+                else
+                {
+                    Error.Content = "Only digit are allowed !";
+                }
+                
             }
         }
     }
