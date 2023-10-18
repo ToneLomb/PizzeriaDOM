@@ -10,25 +10,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
-    /// Logique d'interaction pour TakeOrder.xaml
+    /// Logique d'interaction pour PhoneNumberWindow.xaml
     /// </summary>
-    public partial class TakeOrder : UserControl
+    public partial class PhoneNumberWindow : Window
     {
-        public TakeOrder()
+        public PhoneNumberWindow()
         {
             InitializeComponent();
         }
 
-        private void takeCall_Click(object sender, RoutedEventArgs e)
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            PhoneNumberWindow phoneNumberWindow = new PhoneNumberWindow();
-            phoneNumberWindow.Show();
+            if (e.Key == Key.Return)
+            {
+                LabelPhoneNumber.Content = "You Entered: " + TextPhoneNumber.Text;
+                this.Close();
+            }
         }
     }
 }
