@@ -60,5 +60,15 @@ namespace PizzeriaDOM.src.classes
             get { return _purchaseNumber; }
             set => _purchaseNumber = value;
         }
+        public override string ToString()
+        {
+            return $"Customer Information:\n" +
+                   $"Name: {FirstName} {Surname}\n" +
+                   $"Address: {Adress}\n" +
+                   $"Telephone Number: {TelephoneNumber}\n" +
+                   $"Date of First Order: {DateFirstOrder}\n" +
+                   $"Purchase Number: {PurchaseNumber}";
+        }
+
     }
 }
