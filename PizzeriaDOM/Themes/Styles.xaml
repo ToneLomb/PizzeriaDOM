@@ -15,6 +15,11 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
+    <Style x:Key="Label" TargetType="Label">
+        <Setter Property="Foreground" Value="#F79256"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
     
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
