@@ -55,6 +55,9 @@ namespace PizzeriaDOM.Pages
                 this.customer = registerCustomerWindow.NewCustomer;
 
             }
+
+            //Affichage du nom du client
+            CustomerName.Content = "Customer : " + customer.Surname + " " + customer.FirstName;
             
             
         }
