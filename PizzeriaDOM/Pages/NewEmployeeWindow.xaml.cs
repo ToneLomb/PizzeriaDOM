@@ -10,29 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
-    /// Logique d'interaction pour Employee.xaml
+    /// Logique d'interaction pour NewEmployeeWindow.xaml
     /// </summary>
-    public partial class Employee : UserControl
+    public partial class NewEmployeeWindow : Window
     {
-        public Employee()
+        public NewEmployeeWindow()
         {
             InitializeComponent();
-            
-		}
+        }
 
-        private void NewEmployee_Click(object sender, RoutedEventArgs e)
+        private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            NewEmployeeWindow newEmployee = new NewEmployeeWindow();
-            newEmployee.Show();
+            //TODO
 		}
-
 	}
-
-
 }
