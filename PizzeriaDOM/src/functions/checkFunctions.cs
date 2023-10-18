@@ -10,7 +10,7 @@ namespace PizzeriaDOM.src.functions
 {
     public class checkFunctions
     {
-        public static Boolean customerExist(String telephoneNumber)
+        public static Customer customerExist(String telephoneNumber)
         {
             string workingDirectory = Directory.GetCurrentDirectory();
             string combined = "Customer" + ".json";
@@ -24,11 +24,11 @@ namespace PizzeriaDOM.src.functions
 
                 if (customerFound != null)
                 {
-                    return true;
+                    return customerFound;
                 }
-                else { return false; }
+                else { return null; }
             }
-            else { return false; }
+            else { return null; }
             
 
         }

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PizzeriaDOM.src.classes;
+using PizzeriaDOM.src.functions;
 
 namespace PizzeriaDOM.Pages
 {
@@ -19,16 +21,18 @@ namespace PizzeriaDOM.Pages
     /// </summary>
     public partial class PhoneNumberWindow : Window
     {
+        public string PhoneNumber { get; private set; }
         public PhoneNumberWindow()
         {
             InitializeComponent();
         }
 
+
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
-                LabelPhoneNumber.Content = "You Entered: " + TextPhoneNumber.Text;
+                PhoneNumber = TextPhoneNumber.Text;
                 this.Close();
             }
         }

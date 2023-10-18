@@ -15,10 +15,6 @@
                 <ResourceDictionary Source="../Themes/Geometry.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-
-
-
-
     </UserControl.Resources>
 
     <Grid Background="#45455F">
@@ -31,5 +27,6 @@
                 <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="71">Take a call</TextBlock>
             </StackPanel>
         </Button>
+        <TextBlock HorizontalAlignment="Center" Margin="196,109,196,309">Test</TextBlock>
 	</Grid>
 </UserControl>

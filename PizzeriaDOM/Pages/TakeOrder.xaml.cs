@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PizzeriaDOM.src.classes;
+using PizzeriaDOM.src.functions;
 
 namespace PizzeriaDOM.Pages
 {
@@ -25,10 +28,23 @@ namespace PizzeriaDOM.Pages
             InitializeComponent();
         }
 
+        private Customer customer = null;
+
+        public Customer Customer
+        {
+            get => customer;
+            set => customer = value;
+        }
+
         private void takeCall_Click(object sender, RoutedEventArgs e)
         {
             PhoneNumberWindow phoneNumberWindow = new PhoneNumberWindow();
-            phoneNumberWindow.Show();
+            phoneNumberWindow.ShowDialog(); 
+            string phoneNumber = phoneNumberWindow.PhoneNumber;
+            phoneNumberWindow.Close();
+
+            this.customer = checkFunctions.customerExist(phoneNumber);
+            Trace.WriteLine(customer.FirstName);
         }
     }
 }
