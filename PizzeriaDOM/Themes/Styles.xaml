@@ -75,4 +75,8 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
+        <!--TODO-->
+    </Style>
+
 </ResourceDictionary>
