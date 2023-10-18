@@ -23,18 +23,20 @@ namespace PizzeriaDOM.src.functions
                 string combined = fileName + ".json";
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", combined);
 
-                List<Object> listFromFile = new List<Object>();
+                
                 if (File.Exists(path))
                 {
+                    List<Object> listFromFile = new List<Object>();
                     string dataFromFile = File.ReadAllText(path);
                     listFromFile = JsonConvert.DeserializeObject<List<object>>(dataFromFile);
+                    listFromFile.AddRange(listToWrite);
+                    string objectJson = JsonConvert.SerializeObject(listFromFile);
+                    File.WriteAllText(path, objectJson);
                 }
-
-                listFromFile.AddRange(listToWrite);
-
-
-                string objectJson = JsonConvert.SerializeObject(listFromFile);
-                File.WriteAllText(path, objectJson);
+                else
+                {
+                    File.WriteAllText(path, JsonConvert.SerializeObject(listToWrite)); 
+                }
             }
             catch ( Exception e)
             {
