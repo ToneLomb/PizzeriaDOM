@@ -33,5 +33,51 @@ namespace PizzeriaDOM.src.functions
 
         }
 
+        //return the biggest (last) ID of an employee type
+        //return -1 if there is no file
+        public static int getEmployeeLastID(string fileName)
+        {
+            string workingDirectory = Directory.GetCurrentDirectory();
+            string combined = fileName + ".json";
+            string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", combined);
+            int id = -1;
+
+            //search in the corresponding file
+            if (File.Exists(path))
+            {
+                if (fileName.Equals("Clerk"))
+                {
+                    List<Clerk> listFromFile = IOFile.ReadFromFile<Clerk>("Clerk");
+                    foreach (Clerk c in listFromFile)
+                    {
+                        if (c.ID > id)
+                        {
+                            id = c.ID;
+                        }
+                    }
+
+                    return id;
+                }
+                else if (fileName.Equals("DeliveryMan"))
+                {
+                    List<DeliveryMan> listFromFile = IOFile.ReadFromFile<DeliveryMan>("DeliveryMan");
+                    foreach (DeliveryMan deliveryMan in listFromFile)
+                    { 
+                        if (deliveryMan.ID > id)
+                        {
+                            id = deliveryMan.ID;
+                        }
+                    }
+
+                    return id;
+                }
+            }
+
+            //if the file don't exist
+            return -1;
+
+        }
+
+
     }
 }

@@ -6,12 +6,36 @@
              xmlns:local="clr-namespace:PizzeriaDOM.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
 	<Grid Background="#45455F">
-		<TextBlock Text="Employee" Height="50" VerticalAlignment="Top" TextAlignment="Center" FontSize="25"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="Employee" Height="50" VerticalAlignment="Top" TextAlignment="Center" FontSize="25"/>
 
-		<Button Click="NewEmployee_Click" Width="100" Height="30">New Employee</Button>
+        <ListView Style="{DynamicResource ListViewTemplate}" Grid.Row="1" Name="employeeListView" >
+            <ListView.View>
+                <GridView>
+                    <!-- Define columns for your data -->
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding typeName}" />
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="Order(s) Managed" DisplayMemberBinding="{Binding OrderManaged}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+
+        <Button Grid.Row="2" Click="NewEmployee_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">New Employee</Button>
 		
-
+        
 	</Grid>
 </UserControl>
