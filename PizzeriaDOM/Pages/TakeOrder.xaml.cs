@@ -15,8 +15,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
@@ -66,6 +68,30 @@ namespace PizzeriaDOM.Pages
             // Ajout à la collection
             Products.Add(product);
             productIdCounter++;
+        }
+
+        private void sendCommand_Click(object sender, RoutedEventArgs e)
+        {
+            //Récupérer les infos et pas les mettre en brut
+            List<Order.Product> products = new List<Order.Product>();
+            Order.Product product = new Order.Product("M", "Boisson", 10);
+            Order order = new Order(1, "0000000000", 10, "Preparation", DateTime.Now, products);
+            //
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            //channel.ExchangeDeclare("broadcast", type: ExchangeType.Fanout);
+            channel.BasicPublish(exchange: string.Empty,
+                                 routingKey: "kitchen",
+                                 basicProperties: null,
+                                 body: body);
+            Trace.WriteLine("Message envoyé");
+
         }
     }
 }
