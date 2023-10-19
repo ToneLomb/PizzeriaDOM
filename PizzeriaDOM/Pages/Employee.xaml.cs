@@ -48,6 +48,7 @@ namespace PizzeriaDOM.Pages
             //concat the 2 resulting list
             List<object> employeeList = clerkList.Cast<object>().Concat(deliveryManList.Cast<object>()).ToList();
 
+            //use the list as the source of the ListView
             employeeListView.ItemsSource = employeeList;
         }
     }

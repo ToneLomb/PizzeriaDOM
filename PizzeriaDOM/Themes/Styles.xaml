@@ -216,9 +216,25 @@
             <RadioButton GroupName="PizzaGroup" Content="Viande" />
         </StackPanel>
     </DataTemplate>
+    
+    
 
+    <!--Style for ListView-->
     <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
-        <!--TODO-->
+        <Setter Property="Margin" Value="10" />
+        <!--add a property to not allow the resize of the column and make it so all the column have the same width-->
+        <Setter Property="GridViewColumnHeader.IsHitTestVisible" Value="False" />
     </Style>
 
+    <!--Style for the ScrollViewer in Message.xaml-->
+    <Style x:Key="ScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
+
+    <!--Style for the Textblock in Message.xaml-->
+    <Style x:Key="MessageConsoleTemplate" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
 </ResourceDictionary>
