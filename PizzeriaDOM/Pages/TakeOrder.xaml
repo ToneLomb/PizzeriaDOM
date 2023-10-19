@@ -18,15 +18,58 @@
     </UserControl.Resources>
 
     <Grid Background="#45455F">
-        <StackPanel Margin="0,0,0,384">
+
+        <StackPanel Margin="0,0,0,384" Grid.ColumnSpan="2">
             <Label Style ="{DynamicResource PageTitle}" Width="264" Content="INCOMING CALLS"/>
         </StackPanel>
-        <Button Style="{DynamicResource BaseButton}" Margin="199,66,199,341" Background="Transparent" Click="takeCall_Click">
+        <Button Style="{DynamicResource BaseButton}" Margin="199,66,199,341" Background="Transparent" Click="takeCall_Click" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
                 <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="71">Take a call</TextBlock>
             </StackPanel>
         </Button>
-        <TextBlock HorizontalAlignment="Center" Margin="196,109,196,309">Test</TextBlock>
-	</Grid>
+        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150">
+            <StackPanel Orientation="Horizontal">
+                <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
+                <TextBlock Style="{DynamicResource FontStyle}" Width="86"><Run Text="Add product"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="150" Width="500" Margin="25,271,275,29">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="500" Visibility="Visible" >
+                        <!-- Contenu de chaque StackPanel -->
+                        <TextBlock Text="{Binding ID}" />
+                        <RadioButton GroupName="ProductName" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center">
+                        </RadioButton>
+                        <RadioButton GroupName="ProductName" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0">
+                        </RadioButton>
+
+                        <ContentControl>
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsBoissonSelected}" Value="True">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource BoissonTemplate}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsPizzaSelected}" Value="True">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource PizzaTemplate}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+
+                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center">
+                        </RadioButton>
+                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5">
+                        </RadioButton>
+                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center">
+                        </RadioButton>
+                        
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
 </UserControl>
