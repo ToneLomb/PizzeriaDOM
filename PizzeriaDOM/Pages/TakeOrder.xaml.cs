@@ -38,13 +38,28 @@ namespace PizzeriaDOM.Pages
 
         private void takeCall_Click(object sender, RoutedEventArgs e)
         {
+            //On récupère le numéro de téléphone du client
             PhoneNumberWindow phoneNumberWindow = new PhoneNumberWindow();
             phoneNumberWindow.ShowDialog(); 
             string phoneNumber = phoneNumberWindow.PhoneNumber;
             phoneNumberWindow.Close();
 
+            //On récupère le customer s'il est enregistré dans notre BDD
             this.customer = checkFunctions.customerExist(phoneNumber);
-            Trace.WriteLine(customer.FirstName);
+
+            //Sinon on appelle la fenêtre de formulaire pour l'enregistrer
+            if(customer == null)
+            {
+                RegisterCustomerWindow registerCustomerWindow = new RegisterCustomerWindow();
+                registerCustomerWindow.ShowDialog();
+                this.customer = registerCustomerWindow.NewCustomer;
+
+            }
+
+            //Affichage du nom du client
+            CustomerName.Content = "Customer : " + customer.Surname + " " + customer.FirstName;
+            
+            
         }
     }
 }
