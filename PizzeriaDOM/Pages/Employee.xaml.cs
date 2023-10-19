@@ -33,7 +33,9 @@ namespace PizzeriaDOM.Pages
         private void NewEmployee_Click(object sender, RoutedEventArgs e)
         {
             NewEmployeeWindow newEmployee = new NewEmployeeWindow();
-            newEmployee.Show();
+            newEmployee.ShowDialog();
+
+            updateEmployeeList();
 		}
 
         //read all employee from files then display them on a ListView
@@ -47,7 +49,6 @@ namespace PizzeriaDOM.Pages
             List<object> employeeList = clerkList.Cast<object>().Concat(deliveryManList.Cast<object>()).ToList();
 
             employeeListView.ItemsSource = employeeList;
-
         }
     }
 }
