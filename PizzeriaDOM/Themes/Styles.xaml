@@ -203,20 +203,6 @@
         </Setter>
     </Style>
 
-    <DataTemplate x:Key="BoissonTemplate">
-        <StackPanel Orientation="Horizontal">
-            <RadioButton GroupName="BoissonGroup" Content="Coca" />
-            <RadioButton GroupName="BoissonGroup" Content="Pepsi" />
-        </StackPanel>
-    </DataTemplate>
-
-    <DataTemplate x:Key="PizzaTemplate">
-        <StackPanel Orientation="Horizontal">
-            <RadioButton GroupName="PizzaGroup" Content="Merguez" />
-            <RadioButton GroupName="PizzaGroup" Content="Viande" />
-        </StackPanel>
-    </DataTemplate>
-
     <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
         <!--TODO-->
     </Style>
