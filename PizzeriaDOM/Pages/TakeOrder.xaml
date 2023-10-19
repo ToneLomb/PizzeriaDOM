@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PizzeriaDOM.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="650">
 
     <UserControl.Resources>
 
@@ -19,15 +19,17 @@
 
     <Grid Background="#45455F">
 
-        <StackPanel Margin="0,0,0,384" Grid.ColumnSpan="2">
-            <Label Style ="{DynamicResource PageTitle}" Width="264" Content="INCOMING CALLS"/>
-        </StackPanel>
-        <Button Style="{DynamicResource BaseButton}" Margin="199,66,199,341" Background="Transparent" Click="takeCall_Click" Grid.ColumnSpan="2">
+
+        <Label Style ="{DynamicResource PageTitle}" Width="265" Content="INCOMING CALLS" Height="50" Margin="192,0,192,400"/>
+        <Label Height="35" Width="350" x:Name ="CustomerName" Style="{DynamicResource Label}" FontSize="18" Margin="10,100,290,315"></Label>
+        <Button Style="{DynamicResource BaseButton}" Height="45" Background="Transparent" Click="takeCall_Click" Width="150" Margin="250,55,250,350">
+          
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
-                <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="71">Take a call</TextBlock>
+                <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="73">Take a call</TextBlock>
             </StackPanel>
         </Button>
+
         <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150">
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
@@ -71,5 +73,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
+   
     </Grid>
 </UserControl>
