@@ -25,6 +25,8 @@ namespace PizzeriaDOM.Pages
     /// <summary>
     /// Logique d'interaction pour TakeOrder.xaml
     /// </summary>
+        
+    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -39,6 +41,7 @@ namespace PizzeriaDOM.Pages
         }
 
         private Customer customer = null;
+        private static int cpt = 0;
 
         public Customer Customer
         {
@@ -84,29 +87,33 @@ namespace PizzeriaDOM.Pages
             Products.Add(product);
             productIdCounter++;
         }
-
-        private void sendCommand_Click(object sender, RoutedEventArgs e)
+        private async void sendCommand_Click(object sender, RoutedEventArgs e)
         {
-            //Récupérer les infos et pas les mettre en brut
+            // Récupérer les informations et ne pas les mettre en brut
             List<Order.Product> products = new List<Order.Product>();
             Order.Product product = new Order.Product("M", "Boisson", 10);
-            Order order = new Order(1, "0000000000", 10, "Preparation", DateTime.Now, products);
-            //
-            var factory = new ConnectionFactory { HostName = "localhost" };
-            using var connection = factory.CreateConnection();
-            using var channel = connection.CreateModel();
+            Order order = new Order(cpt, "0000000000", 10, "Preparation", DateTime.Now, products);
+
+             
+                var factory = new ConnectionFactory { HostName = "localhost" };
+                using var connection = factory.CreateConnection();
+                using var channel = connection.CreateModel();
+                channel.QueueBind(queue: "kitchen",
+                              exchange: "toKitchen",
+                              routingKey: "kitchen");
 
             string serializedObject = JsonConvert.SerializeObject(order);
+                var body = Encoding.UTF8.GetBytes(serializedObject);
 
-            var body = Encoding.UTF8.GetBytes(serializedObject);
+                channel.ExchangeDeclare("toKitchen", type: ExchangeType.Direct);
+                channel.BasicPublish(exchange: "toKitchen",
+                                     routingKey: "kitchen",
+                                     basicProperties: null,
+                                     body: body);
 
-            //channel.ExchangeDeclare("broadcast", type: ExchangeType.Fanout);
-            channel.BasicPublish(exchange: string.Empty,
-                                 routingKey: "kitchen",
-                                 basicProperties: null,
-                                 body: body);
             Trace.WriteLine("Message envoyé");
-
+            TakeOrder.cpt += 10;
         }
+
     }
 }
