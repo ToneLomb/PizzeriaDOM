@@ -73,5 +73,11 @@ namespace PizzeriaDOM
             CC.Content = new PizzeriaDOM.Pages.Messages();
             ToggleButtonClick(Messages);
         }
+
+        private void OrderInformations_Click(object sender, RoutedEventArgs e)
+        {
+            CC.Content = new PizzeriaDOM.Pages.OrderInformations();
+            ToggleButtonClick(OrderInformations);
+        }
     }
 }

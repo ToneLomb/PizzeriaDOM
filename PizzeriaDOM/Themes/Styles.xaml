@@ -237,4 +237,18 @@
     <Style x:Key="MessageConsoleTemplate" TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
+    
+    <!--Style for the label in OrderInformations.xaml-->
+    <Style x:Key="OrderLabelTemplate" TargetType="{x:Type Label}">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+    
+    <!--Style for the TextBlock in OrderInformations.xaml-->
+    <Style x:Key="OrderTextBlockTemplate" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
 </ResourceDictionary>
