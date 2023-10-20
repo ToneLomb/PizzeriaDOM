@@ -1,6 +1,7 @@
 ﻿using PizzeriaDOM.src.classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -77,7 +78,19 @@ namespace PizzeriaDOM.src.functions
             return -1;
 
         }
+        public static bool EmptyProductFields(ObservableCollection<ProductPanel> Products)
+        {
+            foreach (var product in Products)
+            {
+                if (string.IsNullOrEmpty(product.selectedProduct) || string.IsNullOrEmpty(product.size))
+                {
+                    return true;
+                }
 
-
+            }
+            return false;
+        }
     }
+
+    
 }

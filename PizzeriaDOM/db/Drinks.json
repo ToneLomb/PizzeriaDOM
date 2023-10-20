@@ -1,0 +1,22 @@
+[
+    {
+        "size": "S",
+        "name": "Coke",
+        "price": 1.5
+    },
+    {
+        "size": "S",
+        "name": "Orangina",
+        "price": 1.5
+    },
+    {
+        "size": "S",
+        "name": "Fanta",
+        "price": 1.5
+    },
+    {
+        "size": "S",
+        "name": "Sprite",
+        "price": 1.5
+    }
+]
