@@ -11,14 +11,17 @@ namespace PizzeriaDOM.src.classes
     public class ProductPanel : INotifyPropertyChanged
     {
         public int ID {  get; set; }
-
         public string sizeGroup { get; set; }
-
         public string productName { get; set; }
-
         public string selectedProduct { get; set; }
-
-        public int quantity { get; set; }   
+        public string size {  get; set; }
+        
+        public int quantity = 1;
+        public int Quantity
+        {
+            get { return quantity; }
+            set { quantity = value; }
+        }
 
         //Déf du booléen
         private bool isBoissonSelected;
