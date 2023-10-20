@@ -57,6 +57,8 @@ namespace PizzeriaDOM.Pages
             IOFile.WriteInFile(list, selectedType);
 
             Trace.WriteLine("Added new " + this.selectedText);
+
+            this.Close();
         }
 
         //handle selection change in the comboBox

@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="PizzeriaDOM.Pages.Messages"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PizzeriaDOM.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="#45455F">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="MESSAGES" HorizontalAlignment="Center" />
+        
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="1" Grid.Column="0" Content="Customer" HorizontalAlignment="Center" />
+        <ScrollViewer Grid.Row="2" Grid.Column="0" Style="{DynamicResource ScrollViewerTemplate}">
+            <TextBlock Name="CustomerConsole" Style="{DynamicResource MessageConsoleTemplate}" />
+        </ScrollViewer>
+        
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="1" Grid.Column="1" Content="Clerk" HorizontalAlignment="Center" />
+        <ScrollViewer Grid.Row="2" Grid.Column="1" Style="{DynamicResource ScrollViewerTemplate}">
+            <TextBlock Name="ClerkConsole" Style="{DynamicResource MessageConsoleTemplate}" />
+        </ScrollViewer>
+        
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="3" Grid.Column="0" Content="Kitchen" HorizontalAlignment="Center" />
+        <ScrollViewer Grid.Row="4" Grid.Column="0" Style="{DynamicResource ScrollViewerTemplate}">
+            <TextBlock Name="KitchenConsole" Style="{DynamicResource MessageConsoleTemplate}" />
+        </ScrollViewer>
+
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="3" Grid.Column="1" Content="Delivery" HorizontalAlignment="Center" />
+        <ScrollViewer Grid.Row="4" Grid.Column="1" Style="{DynamicResource ScrollViewerTemplate}">
+            <TextBlock Name="DeliveryConsole" Style="{DynamicResource MessageConsoleTemplate}" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>
