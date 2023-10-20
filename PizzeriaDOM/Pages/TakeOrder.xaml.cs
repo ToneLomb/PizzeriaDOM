@@ -192,12 +192,13 @@ namespace PizzeriaDOM.Pages
             Button decrease = (Button)sender;
             StackPanel parentStackPanel = (StackPanel)decrease.Parent;
             StackPanel grandParentStackPanel = (StackPanel)parentStackPanel.Parent;
+            ProductPanel product = (ProductPanel)grandParentStackPanel.DataContext;
 
             TextBlock quantity = (TextBlock)grandParentStackPanel.FindName("Quantity");
             int value = int.Parse(quantity.Text);
-            Trace.WriteLine(value);
             if (value > 1) {
                 value--;
+                product.quantity = value;
             }
             quantity.Text = value.ToString();
 
@@ -208,11 +209,70 @@ namespace PizzeriaDOM.Pages
             Button increase = (Button)sender;
             StackPanel parentStackPanel = (StackPanel)increase.Parent;
             StackPanel grandParentStackPanel = (StackPanel)parentStackPanel.Parent;
+            ProductPanel product = (ProductPanel)grandParentStackPanel.DataContext;
 
             TextBlock quantity = (TextBlock)grandParentStackPanel.FindName("Quantity");
             int value = int.Parse(quantity.Text);
             value++;
+            product.quantity = value;
             quantity.Text = value.ToString();
+
+        }
+
+        private void Submit_Click(object sender, RoutedEventArgs e)
+        {
+            if(customer == null)
+            {
+                Error.Content = "There is no customer to take an order";
+                return;
+            }else if (Products.Count == 0) 
+            {
+                Error.Content = "You must add products in the order";
+                return;
+            }
+            else
+            {
+                if (checkFunctions.EmptyProductFields(Products))
+                {
+                    Error.Content = "Some fields are empty, make sure to select a product and a size";
+                    return;
+                }
+                else
+                {
+                    List<Order.Product> products = new List<Order.Product>();
+                    double totalPrice = 0;
+                    foreach(var product in Products)
+                    {
+                        string size = product.size;
+                        string productName = product.selectedProduct;
+                        double price = 0;
+                        if (product.IsBoissonSelected)
+                        {
+                            price = tools.getPrice(productName,"Drinks",size);
+                        }
+                        else {
+                            price = tools.getPrice(productName, "Pizza",size);
+                        }
+                        products.Add(new Order.Product(size,productName,price));
+                        totalPrice += price * product.quantity;
+                    }
+
+                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    Trace.WriteLine(order.ToString());
+                }
+                
+            }
+            
+        }
+
+        private void Size_Click(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = (RadioButton)sender;
+            StackPanel parentStackPanel = (StackPanel)radioButton.Parent;
+
+            ProductPanel product = (ProductPanel)parentStackPanel.DataContext;
+
+            product.size = radioButton.Name;
         }
     }
 }

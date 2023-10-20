@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Themes/Styles.xaml"/>
                 <ResourceDictionary Source="../Themes/Geometry.xaml"/>
+                <ResourceDictionary Source="../Themes/Products.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -32,7 +33,7 @@
         </Button>
         
         <!--Boutton pour ajouter un produit-->
-        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150">
+        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150" Margin="25,135,475,275">
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
                 <TextBlock Style="{DynamicResource FontStyle}" Width="86"><Run Text="Add product"/></TextBlock>
@@ -40,12 +41,15 @@
         </Button>
         
         <!--Liste de tous les produits qui seront affichés dynamiquement -->
-        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="150" Width="600" Margin="0 200 0 0" Background="Blue">
+
+        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="200" Width="600" Margin="0 100 0 0" Padding="0 0 0 0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="500" Visibility="Visible" Background="red">
+                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="450" Margin="0 5 0 0" HorizontalAlignment="Left"> 
+                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
+
                         <!-- Contenu de chaque StackPanel -->
-                        <TextBlock Text="{Binding ID}" />
+                        <TextBlock Margin="10 0 10 0" VerticalAlignment="Center" Text="{Binding ID}" />
                         
                         <!--Boisson ou pizza-->
                         <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
@@ -55,34 +59,40 @@
 
 
                         <!--Choix de la taille des produits-->
-                        <RadioButton GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center">
+                        <RadioButton GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
                         </RadioButton>
-                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5">
+                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5" Click="Size_Click">
                         </RadioButton>
-                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center">
+                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
                         </RadioButton>
                         
                         <!-- SearchBox -->
-                        <TextBox Text="Search ..." x:Name="SearchBox" Width="150" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" KeyUp="SearchBox_KeyUp"></TextBox>
+                        <TextBox Style="{DynamicResource SearchBox}" Text="Search ..." x:Name="SearchBox" Width="150" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" KeyUp="SearchBox_KeyUp"></TextBox>
                         <!-- Création d'une popup qui se met en dessous de la textbox -->
                         <Popup x:Name="suggestionPopup" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False">
                             <ListBox x:Name="suggestionList" SelectionChanged="suggestionList_SelectionChanged"/>
                         </Popup>
 
-                        <TextBlock Background="Green" x:Name="Quantity" Width="100" Height="100">1</TextBlock>
-                        <StackPanel>
-                            <Button Name="Increment" Click="Increment_Click">+</Button>
-                            <Button Name="Decrease" Click="Decrease_Click">-</Button>
+                        <TextBlock Padding="0 3 0 0" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" x:Name="Quantity" Width="20" Height="20">1</TextBlock>
+                        <StackPanel Orientation="Horizontal" Width="100">
+                            <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
+                            <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
                         </StackPanel>
+                        <Button Name="Delete" Margin="-30 0 0 0" Background="Transparent" BorderBrush="Transparent">
+                            <Path Data="{DynamicResource Trash}" Fill="Red"/>
+                        </Button>
 
-
-
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
         <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
-   
+        <Label x:Name="Error" Foreground="Red" Height="30" Width="450" Margin="175,142,25,278"></Label>
+        <Button Name="Submit" Style="{DynamicResource BaseButton}" Background="Transparent" Width="100" Height="50" Margin="525,381,25,19" Foreground="Red" Click="Submit_Click">
+            SUBMIT ORDER
+        </Button>
+        
     </Grid>
 </UserControl>
