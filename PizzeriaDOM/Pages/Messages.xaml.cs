@@ -75,7 +75,7 @@ namespace PizzeriaDOM.Pages
                     {
                         string msg = "La commande" + order.ID + "a bien été prise en compte";
                         CustomerMessage.Add(msg);
-                        
+                        DisplayCustomerMessage();
 
                     }));
                     
@@ -85,13 +85,18 @@ namespace PizzeriaDOM.Pages
                                      autoAck: true,
                                      consumer: consumerCustomer);
 
-                foreach (string message in CustomerMessage)
-                {
-                    CustomerConsole.Text += message + "\n";
-                }
-
+                DisplayCustomerMessage();
             }
 
+        }
+
+        private void DisplayCustomerMessage()
+        {
+            CustomerConsole.Text = string.Empty;
+            foreach (string message in CustomerMessage)
+            {
+                CustomerConsole.Text += message + "\n";
+            }
         }
 
         private void Kitchen(IConnection connection)
