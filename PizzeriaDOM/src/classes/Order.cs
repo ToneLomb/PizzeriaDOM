@@ -72,13 +72,13 @@ namespace PizzeriaDOM.src.classes
         public class Product
         {
             private string _size;
-            private string _type;
-            private int _price;
+            private string _name;
+            private double _price;
 
-            public Product(string size, string type, int price)
+            public Product(string size, string type, double price)
             {
                 this._size = size;
-                this._type = type;
+                this._name = type;
                 this._price = price;
             }
 
@@ -88,17 +88,24 @@ namespace PizzeriaDOM.src.classes
                 set => _size = value;
             }
 
-            public string Type
+            public string Name
             {
-                get => _type;
-                set => _type = value;
+                get => _name;
+                set => _name = value;
             }
 
-            public int Price
+            public double Price
             {
                 get => _price;
                 set => _price = value;
             }
+
+        }
+        public override string ToString()
+        {
+            string productInfo = string.Join(", ", _product.Select(p => p.ToString()));
+
+            return $"Order ID: {_ID}\nCustomer Telephone Number: {_customerTelephoneNumber}\nPrice: {_priceOrder:C2}\nState: {_state}\nDate: {_dateOrder}\nProducts: {productInfo}";
         }
     }
 }

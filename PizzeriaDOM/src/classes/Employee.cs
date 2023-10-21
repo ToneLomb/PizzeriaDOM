@@ -13,7 +13,9 @@ namespace PizzeriaDOM.src.classes
 
     }
 
-        internal class Clerk : Employee
+
+
+    internal class Clerk : Employee
         {
             private int _orderManaged;
             private int _ID;
@@ -29,7 +31,12 @@ namespace PizzeriaDOM.src.classes
                 get => _ID;
                 set => _ID = value;
             }
-        }
+
+            public string typeName
+            {
+                get { return this.GetType().Name; }
+            }
+    }
 
 
         internal class DeliveryMan : Employee
@@ -48,5 +55,10 @@ namespace PizzeriaDOM.src.classes
                 get => _ID;
                 set => _ID = value;
             }
-        }
+
+            public string typeName
+            {
+                get { return this.GetType().Name; }
+            }
+    }
 }

@@ -13,71 +13,87 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Themes/Styles.xaml"/>
                 <ResourceDictionary Source="../Themes/Geometry.xaml"/>
+                <ResourceDictionary Source="../Themes/Products.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="#45455F">
 
-
+        <!--Titre page et nom customer affiché si loadé-->
         <Label Style ="{DynamicResource PageTitle}" Width="265" Content="INCOMING CALLS" Height="50" Margin="192,0,192,400"/>
         <Label Height="35" Width="350" x:Name ="CustomerName" Style="{DynamicResource Label}" FontSize="18" Margin="10,100,290,315"></Label>
+
+        <!-- Boutton pour prendre un appel-->
         <Button Style="{DynamicResource BaseButton}" Height="45" Background="Transparent" Click="takeCall_Click" Width="150" Margin="250,55,250,350">
-          
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
                 <TextBlock Margin="0 2 0 0" Style="{DynamicResource FontStyle}" Width="73">Take a call</TextBlock>
             </StackPanel>
         </Button>
-
-        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150">
+        
+        <!--Boutton pour ajouter un produit-->
+        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="createProduct_Click" Height="40" Width="150" Margin="25,135,475,275">
             <StackPanel Orientation="Horizontal">
                 <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
                 <TextBlock Style="{DynamicResource FontStyle}" Width="86"><Run Text="Add product"/></TextBlock>
             </StackPanel>
         </Button>
-        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="150" Width="500" Margin="25,271,275,29">
+        
+        <!--Liste de tous les produits qui seront affichés dynamiquement -->
+
+        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="200" Width="600" Margin="0 100 0 0" Padding="0 0 0 0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="500" Visibility="Visible" >
+                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="450" Margin="0 5 0 0" HorizontalAlignment="Left"> 
+                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
+
                         <!-- Contenu de chaque StackPanel -->
-                        <TextBlock Text="{Binding ID}" />
-                        <RadioButton  Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center">
+                        <TextBlock Margin="10 0 10 0" VerticalAlignment="Center" Text="{Binding ID}" />
+                        
+                        <!--Boisson ou pizza-->
+                        <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
                         </RadioButton>
-                        <RadioButton  Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0">
+                        <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0" Checked="Pizza_Checked" Unchecked="Pizza_UnChecked">
+
                         </RadioButton>
 
-                        <ContentControl>
-                            <ContentControl.Style>
-                                <Style TargetType="ContentControl">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsBoissonSelected}" Value="True">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource BoissonTemplate}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsPizzaSelected}" Value="True">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource PizzaTemplate}" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
 
-                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center">
+                        <!--Choix de la taille des produits-->
+                        <RadioButton GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
                         </RadioButton>
-                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5">
+                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5" Click="Size_Click">
                         </RadioButton>
-                        <RadioButton GroupName="SizeGroup" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center">
+                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
                         </RadioButton>
                         
-                    </StackPanel>
+                        <!-- SearchBox -->
+                        <TextBox Style="{DynamicResource SearchBox}" Text="Search ..." x:Name="SearchBox" Width="150" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" KeyUp="SearchBox_KeyUp"></TextBox>
+                        <!-- Création d'une popup qui se met en dessous de la textbox -->
+                        <Popup x:Name="suggestionPopup" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False">
+                            <ListBox x:Name="suggestionList" SelectionChanged="suggestionList_SelectionChanged"/>
+                        </Popup>
+
+                        <TextBlock Padding="0 3 0 0" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" x:Name="Quantity" Width="20" Height="20">1</TextBlock>
+                        <StackPanel Orientation="Horizontal" Width="100">
+                            <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
+                            <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
+                        </StackPanel>
+                        <Button Name="Delete" Margin="-30 0 0 0" Background="Transparent" BorderBrush="Transparent">
+                            <Path Data="{DynamicResource Trash}" Fill="Red"/>
+                        </Button>
+
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Button Style="{DynamicResource BaseButton}" Background="Transparent" Click="sendCommand_Click" Height="40" Width="150" Margin="490,381,10,29">
-            <StackPanel Orientation="Horizontal">
-                <Path Margin="0 0 10 0" Data="{DynamicResource Plus}" Fill="#44CF6C"/>
-                <TextBlock Style="{DynamicResource FontStyle}" Width="150">Confirm command</TextBlock>
-            </StackPanel>
+
+        <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
+        <Label x:Name="Error" Foreground="Red" Height="30" Width="450" Margin="175,142,25,278"></Label>
+        <Button Name="Submit" Style="{DynamicResource BaseButton}" Background="Transparent" Width="100" Height="50" Margin="525,381,25,19" Foreground="Red" Click="Submit_Click">
+            SUBMIT ORDER
         </Button>
+        
     </Grid>
 </UserControl>

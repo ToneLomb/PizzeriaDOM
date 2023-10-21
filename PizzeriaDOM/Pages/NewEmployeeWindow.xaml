@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PizzeriaDOM.Pages"
         mc:Ignorable="d"
-        Title="NewEmployeeWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="Add New Employee" Height="Auto"  Width="Auto" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -13,22 +13,23 @@
 			<RowDefinition Height="Auto" />
 			<!-- Row for TextBox 1 -->
 			<RowDefinition Height="Auto" />
-			<!-- Row for TextBox 2 -->
-			<RowDefinition Height="Auto" />
 			<!-- Row for Button -->
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
-			<!-- Column for Labels (optional) -->
-			<ColumnDefinition Width="*" />
-			<!-- Column for Controls -->
+			<!-- Column for Labels -->
+			<ColumnDefinition Width="Auto" />
+			<!-- Column for Inputs -->
 		</Grid.ColumnDefinitions>
 
-		<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="New Employee's Informations" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="New Employee's Informations" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 
-		<Label Grid.Row="1" Grid.Column="0" Content="Name" VerticalAlignment="Center" />
-		<TextBox Grid.Row="1" Grid.Column="1" Name="EmployeeName" Width="200" />
+        <Label Grid.Row="1" Grid.Column="0" Content="Type" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" Name="TypeEmployee" Width="100" Height="25" Margin="10" SelectionChanged="TypeEmployee_SelectionChanged">
+            <ComboBoxItem>Clerk</ComboBoxItem>
+            <ComboBoxItem>Delivery Man</ComboBoxItem>
+        </ComboBox>
 
-		<Button Grid.Row="3" Grid.Column="1" Click="Submit_Click" Content="Submit" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Click="Submit_Click" Content="Submit" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" />
 	</Grid>
 </Window>
