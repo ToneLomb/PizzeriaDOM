@@ -62,6 +62,12 @@ namespace PizzeriaDOM.src.classes
             get => _product;
             set => _product = value;
         }
+        public override string ToString()
+        {
+            string productInfo = string.Join(", ", _product.Select(p => p.ToString()));
+
+            return $"Order ID: {_ID}\nCustomer Telephone Number: {_customerTelephoneNumber}\nPrice: {_priceOrder:C2}\nState: {_state}\nDate: {_dateOrder}\nProducts: {productInfo}";
+        }
 
         public class Product
         {
@@ -94,12 +100,6 @@ namespace PizzeriaDOM.src.classes
                 set => _price = value;
             }
 
-        }
-        public override string ToString()
-        {
-            string productInfo = string.Join(", ", _product.Select(p => p.ToString()));
-
-            return $"Order ID: {_ID}\nCustomer Telephone Number: {_customerTelephoneNumber}\nPrice: {_priceOrder:C2}\nState: {_state}\nDate: {_dateOrder}\nProducts: {productInfo}";
         }
     }
 }

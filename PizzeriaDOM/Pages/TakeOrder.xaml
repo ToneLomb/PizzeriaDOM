@@ -55,6 +55,7 @@
                         <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
                         </RadioButton>
                         <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0" Checked="Pizza_Checked" Unchecked="Pizza_UnChecked">
+
                         </RadioButton>
 
 

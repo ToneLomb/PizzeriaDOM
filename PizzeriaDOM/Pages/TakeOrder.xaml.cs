@@ -18,12 +18,15 @@ using System.Windows.Shapes;
 using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
     /// Logique d'interaction pour TakeOrder.xaml
     /// </summary>
+        
+    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -88,7 +91,6 @@ namespace PizzeriaDOM.Pages
             //Set du groupName unique des radioBouttons
             productIdCounter++;
         }
-
         //Les deux méthodes ci dessous permettent de mettre le placeholder "Search ..."
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {

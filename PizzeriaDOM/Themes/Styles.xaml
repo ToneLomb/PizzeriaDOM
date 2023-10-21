@@ -162,9 +162,51 @@
             </Setter.Value>
         </Setter>
     </Style>
+   
+    <DataTemplate x:Key="BoissonTemplate">
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="BoissonGroup" Content="Coca" />
+            <RadioButton GroupName="BoissonGroup" Content="Pepsi" />
+        </StackPanel>
+    </DataTemplate>
 
+    <DataTemplate x:Key="PizzaTemplate">
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="PizzaGroup" Content="Merguez" />
+            <RadioButton GroupName="PizzaGroup" Content="Viande" />
+        </StackPanel>
+    </DataTemplate>
+    
+    <!--Style for ListView-->
     <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
-        <!--TODO-->
+        <Setter Property="Margin" Value="10" />
+        <!--add a property to not allow the resize of the column and make it so all the column have the same width-->
+        <Setter Property="GridViewColumnHeader.IsHitTestVisible" Value="False" />
     </Style>
 
+    <!--Style for the ScrollViewer in Message.xaml-->
+    <Style x:Key="ScrollViewerTemplate" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Margin" Value="10" />
+    </Style>
+
+    <!--Style for the Textblock in Message.xaml-->
+    <Style x:Key="MessageConsoleTemplate" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    
+    <!--Style for the label in OrderInformations.xaml-->
+    <Style x:Key="OrderLabelTemplate" TargetType="{x:Type Label}">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+    
+    <!--Style for the TextBlock in OrderInformations.xaml-->
+    <Style x:Key="OrderTextBlockTemplate" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
 </ResourceDictionary>

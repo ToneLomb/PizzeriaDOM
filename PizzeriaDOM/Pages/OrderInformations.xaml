@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="PizzeriaDOM.Pages.OrderInformations"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PizzeriaDOM.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="#45455F">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="0" Grid.ColumnSpan="2" Content="ORDER INFORMATIONS" HorizontalAlignment="Center" />
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Label Content="ID :" Style="{DynamicResource OrderLabelTemplate}" />
+            <ComboBox Name="ComboID" SelectionChanged="ComboID_SelectionChanged" Height="Auto">
+                <ComboBox.Margin>
+                    <Thickness Top="10" Bottom="10" />
+                </ComboBox.Margin>
+            </ComboBox>
+        </StackPanel>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Customer Number :" Style="{DynamicResource OrderLabelTemplate}" />
+        <TextBlock Name="CustomerNumberTextBlock" Grid.Row="3" Grid.Column="0" Style="{DynamicResource OrderTextBlockTemplate}" />
+
+        <Label Grid.Row="2" Grid.Column="1" Content="Total Price :" Style="{DynamicResource OrderLabelTemplate}" />
+        <TextBlock Name="TotalPriceTextBlock" Grid.Row="3" Grid.Column="1" Style="{DynamicResource OrderTextBlockTemplate}" />
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Status :" Style="{DynamicResource OrderLabelTemplate}" />
+        <TextBlock Name="StatusTextBlock" Grid.Row="5" Grid.Column="0" Style="{DynamicResource OrderTextBlockTemplate}" />
+
+        <Label Grid.Row="4" Grid.Column="1" Content="Date :" Style="{DynamicResource OrderLabelTemplate}" />
+        <TextBlock Name="DateTextblock" Grid.Row="5" Grid.Column="1" Style="{DynamicResource OrderTextBlockTemplate}" />
+
+        <Label Grid.Row="6" Grid.Column="0" Content="Products List :" Style="{DynamicResource OrderLabelTemplate}" />
+        <ListView Name="PizzaListView" Grid.Row="7" Grid.Column="0">
+            <ListView.Margin>
+                <Thickness Left="10" Bottom="10"/>
+            </ListView.Margin>
+        </ListView>
+        <ListView Name="DrinkListView" Grid.Row="7" Grid.Column="1">
+            <ListView.Margin>
+                <Thickness Right="10" Bottom="10"/>
+            </ListView.Margin>
+        </ListView>
+    </Grid>
+</UserControl>

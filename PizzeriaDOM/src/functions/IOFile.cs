@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using PizzeriaDOM.src.classes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -72,5 +74,21 @@ namespace PizzeriaDOM.src.functions
             }
         }
 
+        public static int countOrders()
+        {
+            string workingDirectory = Directory.GetCurrentDirectory();
+            string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Orders.json");
+
+            if (File.Exists(path))
+            {
+                string ObjectJson = File.ReadAllText(path);
+                List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(ObjectJson);
+                return orders.Count;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 }
