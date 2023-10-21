@@ -14,7 +14,7 @@ namespace PizzeriaDOM.src.classes
         private DateTime _dateOrder;
         private List<Product> _product;
         private Customer _customer;
-        private int _kitchenCountdown = 15;
+        private int _kitchenCountdown = 3;
 
         //DÃ©finir un certain prix selon type / size pizza
 
