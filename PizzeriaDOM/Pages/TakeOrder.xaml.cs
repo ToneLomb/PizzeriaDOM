@@ -257,12 +257,60 @@ namespace PizzeriaDOM.Pages
                         totalPrice += price * product.quantity;
                     }
 
-                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
-                    Trace.WriteLine(order.ToString());
+
+                    int orderID = IOFile.countOrders();
+                    Order order = new Order(orderID,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    List<Object> orders = new List<Object>();
+                    orders.Add(order);
+                    IOFile.WriteInFile(orders, "Orders");
+
                 }
                 
             }
             
+                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    Trace.WriteLine("Avant envoi" + order.ToString());
+                    sendOrder(order);
+
+                    
+                }
+                
+            }
+            
+        }
+
+        private void sendOrder(Order order)
+        {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Topic", type: ExchangeType.Topic);
+
+
+            channel.QueueBind(queue: "kitchen",
+                          exchange: "Topic",
+                          routingKey: "kitchen.*.*.*");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "*.clerk.*.*");
+            channel.QueueBind(queue: "delivery",
+                          exchange: "Topic",
+                          routingKey: "*.*.*.delivery");
+            channel.QueueBind(queue: "customer",
+                          exchange: "Topic",
+                          routingKey: "*.*.customer.*");
+            channel.QueueBind(queue: "security",
+                          exchange: "Topic",
+                          routingKey: "*.*.*.*");
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.BasicPublish(exchange: "Topic",
+                                 routingKey: "kitchen.clerk.customer.delivery",
+                                 basicProperties: null,
+                                 body: body);
+            Trace.WriteLine("Message envoyé");
         }
 
         private void Size_Click(object sender, RoutedEventArgs e)
