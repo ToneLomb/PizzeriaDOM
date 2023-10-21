@@ -15,14 +15,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
     /// Logique d'interaction pour TakeOrder.xaml
     /// </summary>
+        
+    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -87,7 +91,6 @@ namespace PizzeriaDOM.Pages
             //Set du groupName unique des radioBouttons
             productIdCounter++;
         }
-
         //Les deux méthodes ci dessous permettent de mettre le placeholder "Search ..."
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -269,6 +272,49 @@ namespace PizzeriaDOM.Pages
                 
             }
             
+                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    Trace.WriteLine("Avant envoi" + order.ToString());
+                    sendOrder(order);
+
+                    
+                }
+                
+            }
+            
+        }
+
+        private void sendOrder(Order order)
+        {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Topic", type: ExchangeType.Topic);
+
+
+            channel.QueueBind(queue: "kitchen",
+                          exchange: "Topic",
+                          routingKey: "kitchen.*.*.*");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "*.clerk.*.*");
+            channel.QueueBind(queue: "delivery",
+                          exchange: "Topic",
+                          routingKey: "*.*.*.delivery");
+            channel.QueueBind(queue: "customer",
+                          exchange: "Topic",
+                          routingKey: "*.*.customer.*");
+            channel.QueueBind(queue: "security",
+                          exchange: "Topic",
+                          routingKey: "*.*.*.*");
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.BasicPublish(exchange: "Topic",
+                                 routingKey: "kitchen.clerk.customer.delivery",
+                                 basicProperties: null,
+                                 body: body);
+            Trace.WriteLine("Message envoyé");
         }
 
         private void Size_Click(object sender, RoutedEventArgs e)
