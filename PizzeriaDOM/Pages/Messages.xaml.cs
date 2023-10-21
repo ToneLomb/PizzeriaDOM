@@ -45,7 +45,6 @@ namespace PizzeriaDOM.Pages
             Customer(connection);
             Kitchen(connection);
             Clerk(connection);
-            Delivery(connection);
         }
 
         private void Security(IConnection connection)
@@ -140,6 +139,7 @@ namespace PizzeriaDOM.Pages
                                 kitchenTimer.Stop();
                                 KitchenMessage.Remove(order.ID);
                                 DisplayKitchenMessage();
+                                sendDelivery(order,connection);
                             }
                         };
 
@@ -158,6 +158,12 @@ namespace PizzeriaDOM.Pages
             {
                 KitchenConsole.Text += keyValue.Value + "\n";
             }
+        }
+
+        private void sendDelivery(Order order, IConnection connection)
+        {
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Direct", type: ExchangeType.Direct);
         }
 
         private void Clerk(IConnection connection)

@@ -40,6 +40,7 @@ namespace PizzeriaDOM.src.classes
             set => _customer = value;
         }
 
+
         public double PriceOrder
         {
             get => _priceOrder;
