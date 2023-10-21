@@ -32,7 +32,7 @@ namespace PizzeriaDOM.Pages
         {
             InitializeComponent();
 
-            var factory = new ConnectionFactory { HostName = "localhost" };
+           /* var factory = new ConnectionFactory { HostName = "localhost" };
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
@@ -62,6 +62,7 @@ namespace PizzeriaDOM.Pages
             channel.BasicConsume(queue: "kitchen",
                                  autoAck: true,
                                  consumer: consumer);
+           */
         }
     }
 }
