@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzeriaDOM.src.classes
 {
-    internal abstract class Employee
+    public abstract class Employee
     {
         public abstract int OrderManaged { get; set; }
         public abstract int ID { get; set; }
@@ -15,7 +15,7 @@ namespace PizzeriaDOM.src.classes
 
 
 
-    internal class Clerk : Employee
+    public class Clerk : Employee
         {
             private int _orderManaged;
             private int _ID;
@@ -39,7 +39,7 @@ namespace PizzeriaDOM.src.classes
     }
 
 
-        internal class DeliveryMan : Employee
+        public class DeliveryMan : Employee
         {
             private int _orderDelivered;
             private int _ID;
