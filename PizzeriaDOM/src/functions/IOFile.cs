@@ -90,5 +90,25 @@ namespace PizzeriaDOM.src.functions
                 return 1;
             }
         }
+
+        public static void updateOrder(Order order, string state)
+        {
+            List<Order> orderFromFile = ReadFromFile<Order>("Orders");
+
+            Order orderToUpdate = orderFromFile.FirstOrDefault(e => e.ID == order.ID);
+
+            if (orderToUpdate != null)
+            {
+                orderToUpdate.State = state;
+                string updatedList = JsonConvert.SerializeObject(orderFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Orders.json");
+                File.WriteAllText(path, updatedList);
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 }
