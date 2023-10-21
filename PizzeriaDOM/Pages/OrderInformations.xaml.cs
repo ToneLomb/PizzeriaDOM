@@ -54,7 +54,7 @@ namespace PizzeriaDOM.Pages
             //get the order with the selected ID
             Order selectedOrder = orderList.Find(order => order.ID == selectedID);
 
-            CustomerNumberTextBlock.Text = selectedOrder.CustomerTelephoneNumber;
+            //CustomerNumberTextBlock.Text = selectedOrder.CustomerTelephoneNumber;
 
             TotalPriceTextBlock.Text = selectedOrder.PriceOrder.ToString();
 
