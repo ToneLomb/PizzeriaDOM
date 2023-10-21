@@ -15,14 +15,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
     /// Logique d'interaction pour TakeOrder.xaml
     /// </summary>
+        
+    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -37,6 +41,7 @@ namespace PizzeriaDOM.Pages
         }
 
         private Customer customer = null;
+        private static int cpt = 0;
 
         public Customer Customer
         {
@@ -87,7 +92,6 @@ namespace PizzeriaDOM.Pages
             //Set du groupName unique des radioBouttons
             productIdCounter++;
         }
-
         //Les deux méthodes ci dessous permettent de mettre le placeholder "Search ..."
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -274,5 +278,34 @@ namespace PizzeriaDOM.Pages
 
             product.size = radioButton.Name;
         }
+        private async void sendCommand_Click(object sender, RoutedEventArgs e)
+        {
+            // Récupérer les informations et ne pas les mettre en brut
+            List<Order.Product> products = new List<Order.Product>();
+            Order.Product product = new Order.Product("M", "Boisson", 10);
+            Order order = new Order(cpt, "0000000000", 10, "Preparation", DateTime.Now, products);
+
+             
+                var factory = new ConnectionFactory { HostName = "localhost" };
+                using var connection = factory.CreateConnection();
+                using var channel = connection.CreateModel();
+                channel.QueueBind(queue: "kitchen",
+                              exchange: "toKitchen",
+                              routingKey: "kitchen");
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+                var body = Encoding.UTF8.GetBytes(serializedObject);
+
+                channel.ExchangeDeclare("toKitchen", type: ExchangeType.Direct);
+                channel.BasicPublish(exchange: "toKitchen",
+                                     routingKey: "kitchen",
+                                     basicProperties: null,
+                                     body: body);
+
+            Trace.WriteLine("Message envoyé");
+            TakeOrder.cpt += 10;
+        }
+
+
     }
 }

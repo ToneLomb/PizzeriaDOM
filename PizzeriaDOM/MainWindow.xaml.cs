@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using System.Xml.Serialization;
 using PizzeriaDOM.src.functions;
 using System.IO;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM
 {
@@ -31,6 +32,13 @@ namespace PizzeriaDOM
 
             InitializeComponent();
             CC.Content = new PizzeriaDOM.Pages.TakeOrder();
+
+
+            //Déclaration de files
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.QueueDeclare("kitchen", durable: true, exclusive: false, autoDelete: false);
         }
 
         private void ToggleButtonClick(ToggleButton selectedButton)
