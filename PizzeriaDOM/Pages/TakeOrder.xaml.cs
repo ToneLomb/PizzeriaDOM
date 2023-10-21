@@ -260,6 +260,18 @@ namespace PizzeriaDOM.Pages
                         totalPrice += price * product.quantity;
                     }
 
+
+                    int orderID = IOFile.countOrders();
+                    Order order = new Order(orderID,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    List<Object> orders = new List<Object>();
+                    orders.Add(order);
+                    IOFile.WriteInFile(orders, "Orders");
+
+                    Trace.WriteLine(order.ToString());
+                }
+                
+            }
+            
                     Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
                     Trace.WriteLine("Avant envoi" + order.ToString());
                     sendOrder(order);
