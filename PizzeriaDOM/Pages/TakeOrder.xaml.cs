@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,12 +41,19 @@ namespace PizzeriaDOM.Pages
             DataContext = this;
         }
 
+        private Clerk clerk = null;
         private Customer customer = null;
 
         public Customer Customer
         {
             get => customer;
             set => customer = value;
+        }
+
+        public Clerk Clerk
+        {
+            get => clerk;
+            set => clerk = value;
         }
 
         private void takeCall_Click(object sender, RoutedEventArgs e)
@@ -262,7 +270,7 @@ namespace PizzeriaDOM.Pages
 
 
                     int orderID = IOFile.countOrders();
-                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products);
+                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products, clerk);
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
@@ -318,6 +326,35 @@ namespace PizzeriaDOM.Pages
             product.size = radioButton.Name;
         }
 
+        private void choseClerkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox chosenList = (ListBox)sender;
+            string chosenClerk = chosenList.SelectedItem.ToString();
+            choseClerk.Content = chosenClerk;
+            string id = chosenClerk.Split(" ")[1];
+
+            List<Clerk> clerkList = IOFile.ReadFromFile<Clerk>("Clerk");
+
+            clerk = clerkList.FirstOrDefault(e => e.ID == int.Parse(id));
+        }
+
+        private void choseClerk_Click(object sender, RoutedEventArgs e)
+        {
+            ListBox list = choseClerkList;
+
+            List<Clerk> clerkList= IOFile.ReadFromFile<Clerk>("Clerk");
+
+            List<string> clerkNames = new List<string>();
+
+            foreach (Clerk clerk in clerkList)
+            {
+                clerkNames.Add(clerk.typeName + " " + clerk.ID);
+            }
+
+            list.ItemsSource = clerkNames;
+
+            ClerkList.IsOpen = true;
+        }
     }
             
         }
