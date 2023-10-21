@@ -262,26 +262,20 @@ namespace PizzeriaDOM.Pages
 
 
                     int orderID = IOFile.countOrders();
-                    Order order = new Order(orderID,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products);
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
 
-                    Trace.WriteLine(order.ToString());
+                    sendOrder(order);
+
                 }
                 
             }
-            
-                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
-                    Trace.WriteLine("Avant envoi" + order.ToString());
-                    sendOrder(order);
+                    
 
                     
                 }
-                
-            }
-            
-        }
 
         private void sendOrder(Order order)
         {
@@ -293,25 +287,22 @@ namespace PizzeriaDOM.Pages
 
             channel.QueueBind(queue: "kitchen",
                           exchange: "Topic",
-                          routingKey: "kitchen.*.*.*");
+                          routingKey: "kitchen.*.*");
             channel.QueueBind(queue: "clerk",
                           exchange: "Topic",
-                          routingKey: "*.clerk.*.*");
-            channel.QueueBind(queue: "delivery",
-                          exchange: "Topic",
-                          routingKey: "*.*.*.delivery");
+                          routingKey: "*.clerk.*");
             channel.QueueBind(queue: "customer",
                           exchange: "Topic",
-                          routingKey: "*.*.customer.*");
+                          routingKey: "*.*.customer");
             channel.QueueBind(queue: "security",
                           exchange: "Topic",
-                          routingKey: "*.*.*.*");
+                          routingKey: "*.*.*");
 
             string serializedObject = JsonConvert.SerializeObject(order);
             var body = Encoding.UTF8.GetBytes(serializedObject);
 
             channel.BasicPublish(exchange: "Topic",
-                                 routingKey: "kitchen.clerk.customer.delivery",
+                                 routingKey: "kitchen.clerk.customer",
                                  basicProperties: null,
                                  body: body);
             Trace.WriteLine("Message envoyé");
@@ -326,5 +317,9 @@ namespace PizzeriaDOM.Pages
 
             product.size = radioButton.Name;
         }
+
     }
-}
+            
+        }
+
+        
