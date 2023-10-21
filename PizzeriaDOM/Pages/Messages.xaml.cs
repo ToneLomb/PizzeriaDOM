@@ -29,15 +29,10 @@ namespace PizzeriaDOM.Pages
     {
         static List<String> CustomerMessage = new List<String>();
         static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
-
-        private int kitchenCountdown = 15; // Temps initial en secondes
         private DispatcherTimer kitchenTimer;
         public Messages()
         {
             InitializeComponent();
-
-
-            
 
             var factory = new ConnectionFactory { HostName = "localhost" };
             using var connection = factory.CreateConnection();
@@ -139,7 +134,7 @@ namespace PizzeriaDOM.Pages
                                 kitchenTimer.Stop();
                                 KitchenMessage.Remove(order.ID);
                                 DisplayKitchenMessage();
-                                sendDelivery(order,connection);
+                                sendDelivery(order);
                             }
                         };
 
@@ -160,10 +155,27 @@ namespace PizzeriaDOM.Pages
             }
         }
 
-        private void sendDelivery(Order order, IConnection connection)
+        private void sendDelivery(Order order)
         {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
             channel.ExchangeDeclare("Direct", type: ExchangeType.Direct);
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.QueueBind(queue: "delivery",
+                  exchange: "Direct",
+                  routingKey: "delivery"
+                  );
+
+            channel.BasicPublish(exchange: "Direct",
+                                 routingKey: "delivery",
+                                 basicProperties: null,
+                                 body: body);
+
+            Delivery(connection);
         }
 
         private void Clerk(IConnection connection)
