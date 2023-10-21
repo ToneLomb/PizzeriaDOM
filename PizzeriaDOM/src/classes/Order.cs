@@ -9,18 +9,19 @@ namespace PizzeriaDOM.src.classes
     internal class Order
     {
         private int _ID;
-        private string _customerTelephoneNumber;
         private double _priceOrder;
         private string _state; // [Preparation, delivery, closed, lost]
         private DateTime _dateOrder;
         private List<Product> _product;
+        private Customer _customer;
+        private int _kitchenCountdown = 15;
 
         //DÃ©finir un certain prix selon type / size pizza
 
-        public Order(int ID, string customerTelephoneNumber, double priceOrder, string state, DateTime dateOrder, List<Product> product)
+        public Order(int ID, Customer customer, double priceOrder, string state, DateTime dateOrder, List<Product> product)
         {
             this._ID = ID;
-            this._customerTelephoneNumber = customerTelephoneNumber;
+            this._customer = customer;
             this._priceOrder = priceOrder;
             this._state = state;
             this._dateOrder = dateOrder;
@@ -33,10 +34,10 @@ namespace PizzeriaDOM.src.classes
             set => _ID = value;
         }
 
-        public string CustomerTelephoneNumber
+        public Customer Customer
         {
-            get => _customerTelephoneNumber;
-            set => _customerTelephoneNumber = value;
+            get => _customer;
+            set => _customer = value;
         }
 
         public double PriceOrder
@@ -62,11 +63,17 @@ namespace PizzeriaDOM.src.classes
             get => _product;
             set => _product = value;
         }
+
+        public int KitchenCountdown
+        {
+            get => _kitchenCountdown;
+            set => _kitchenCountdown = value;
+        }
         public override string ToString()
         {
             string productInfo = string.Join(", ", _product.Select(p => p.ToString()));
 
-            return $"Order ID: {_ID}\nCustomer Telephone Number: {_customerTelephoneNumber}\nPrice: {_priceOrder:C2}\nState: {_state}\nDate: {_dateOrder}\nProducts: {productInfo}";
+            return $"Order ID: {_ID}\nCustomer: {_customer}\nPrice: {_priceOrder:C2}\nState: {_state}\nDate: {_dateOrder}\nProducts: {productInfo}";
         }
 
         public class Product

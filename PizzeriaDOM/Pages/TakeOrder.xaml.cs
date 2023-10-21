@@ -262,7 +262,7 @@ namespace PizzeriaDOM.Pages
 
 
                     int orderID = IOFile.countOrders();
-                    Order order = new Order(orderID,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
+                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products);
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");

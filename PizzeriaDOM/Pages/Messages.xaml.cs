@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PizzeriaDOM.Pages
 {
@@ -27,6 +28,10 @@ namespace PizzeriaDOM.Pages
     public partial class Messages : UserControl
     {
         static List<String> CustomerMessage = new List<String>();
+        static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
+
+        private int kitchenCountdown = 15; // Temps initial en secondes
+        private DispatcherTimer kitchenTimer;
         public Messages()
         {
             InitializeComponent();
@@ -73,7 +78,7 @@ namespace PizzeriaDOM.Pages
                     Order order = JsonConvert.DeserializeObject<Order>(message);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        string msg = "La commande" + order.ID + "a bien été prise en compte";
+                        string msg = $"Hello {order.Customer.Surname + " " + order.Customer.FirstName} your order No : {order.ID} is now in preparation !";
                         CustomerMessage.Add(msg);
                         DisplayCustomerMessage();
 
@@ -103,7 +108,6 @@ namespace PizzeriaDOM.Pages
         {
             using (var channelKitchen = connection.CreateModel())
             {
-
                 Trace.WriteLine("Kitchen func");
 
                 var consumerKitchen = new EventingBasicConsumer(channelKitchen);
@@ -112,18 +116,48 @@ namespace PizzeriaDOM.Pages
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
+
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        KitchenConsole.Text += order.ToString();
-                    }));
+                        string msg = $"{order.ID} Time remaining: {order.KitchenCountdown} seconds";
+                        KitchenMessage.Add(order.ID, msg);
+                        // Création d'un timer et définission intervalle = 1s, éxecuter la fonction
+                        kitchenTimer = new DispatcherTimer();
+                        kitchenTimer.Interval = TimeSpan.FromSeconds(1);
+                        kitchenTimer.Tick += (sender, e) =>
+                        {
+                            msg = $"{order.ID} Time remaining: {order.KitchenCountdown} seconds";
+                            // Mettez à jour le message de la console Kitchen
+                            KitchenMessage[order.ID] = msg;
+                            DisplayKitchenMessage();
 
+                            // Réduisez le temps restant
+                            order.KitchenCountdown--;
+
+                            // Si le compte à rebours atteint 0, arrêtez le timer
+                            if (order.KitchenCountdown < 0)
+                            {
+                                kitchenTimer.Stop();
+                                KitchenMessage.Remove(order.ID);
+                                DisplayKitchenMessage();
+                            }
+                        };
+
+                        kitchenTimer.Start();
+                    }));
                 };
 
-                channelKitchen.BasicConsume(queue: "kitchen",
-                                     autoAck: true,
-                                     consumer: consumerKitchen);
+                channelKitchen.BasicConsume(queue: "kitchen", autoAck: true, consumer: consumerKitchen);
             }
+        }
 
+        private void DisplayKitchenMessage()
+        {
+            KitchenConsole.Text = string.Empty;
+            foreach (var keyValue in KitchenMessage)
+            {
+                KitchenConsole.Text += keyValue.Value + "\n";
+            }
         }
 
         private void Clerk(IConnection connection)
