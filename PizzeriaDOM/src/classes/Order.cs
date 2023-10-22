@@ -14,11 +14,14 @@ namespace PizzeriaDOM.src.classes
         private DateTime _dateOrder;
         private List<Product> _product;
         private Customer _customer;
-        private int _kitchenCountdown = 3;
+
+        private int _kitchenCountdown = 15;
+        private Clerk _clerk;
+
 
         //DÃ©finir un certain prix selon type / size pizza
 
-        public Order(int ID, Customer customer, double priceOrder, string state, DateTime dateOrder, List<Product> product)
+        public Order(int ID, Customer customer, double priceOrder, string state, DateTime dateOrder, List<Product> product, Clerk clerk)
         {
             this._ID = ID;
             this._customer = customer;
@@ -26,6 +29,7 @@ namespace PizzeriaDOM.src.classes
             this._state = state;
             this._dateOrder = dateOrder;
             this._product = product;
+            this._clerk = clerk;
         }
 
         public int ID
@@ -38,6 +42,12 @@ namespace PizzeriaDOM.src.classes
         {
             get => _customer;
             set => _customer = value;
+        }
+
+        public Clerk Clerk
+        {
+            get => _clerk;
+            set => _clerk = value;
         }
 
 

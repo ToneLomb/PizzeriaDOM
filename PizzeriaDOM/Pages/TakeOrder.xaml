@@ -94,6 +94,9 @@
         <Button Name="Submit" Style="{DynamicResource BaseButton}" Background="Transparent" Width="100" Height="50" Margin="525,381,25,19" Foreground="Red" Click="Submit_Click">
             SUBMIT ORDER
         </Button>
-        
+        <Button x:Name="choseClerk" Height="50" Width="80"  Click="choseClerk_Click" Content="Chose clerk" Margin="525,25,45,375"/>
+        <Popup x:Name="ClerkList" PlacementTarget="{Binding ElementName=choseClerk}" StaysOpen="False">
+            <ListBox x:Name="choseClerkList" SelectionChanged="choseClerkList_SelectionChanged"/>
+        </Popup>
     </Grid>
 </UserControl>
