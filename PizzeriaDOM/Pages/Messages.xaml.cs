@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PizzeriaDOM.Pages
 {
@@ -27,12 +28,11 @@ namespace PizzeriaDOM.Pages
     public partial class Messages : UserControl
     {
         static List<String> CustomerMessage = new List<String>();
+        static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
+        private DispatcherTimer kitchenTimer;
         public Messages()
         {
             InitializeComponent();
-
-
-            
 
             var factory = new ConnectionFactory { HostName = "localhost" };
             using var connection = factory.CreateConnection();
@@ -40,7 +40,6 @@ namespace PizzeriaDOM.Pages
             Customer(connection);
             Kitchen(connection);
             Clerk(connection);
-            Delivery(connection);
         }
 
         private void Security(IConnection connection)
@@ -73,9 +72,9 @@ namespace PizzeriaDOM.Pages
                     Order order = JsonConvert.DeserializeObject<Order>(message);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        string msg = "La commande" + order.ID + "a bien été prise en compte";
+                        string msg = $"Hello {order.Customer.Surname + " " + order.Customer.FirstName} your order No : {order.ID} is now in preparation !";
                         CustomerMessage.Add(msg);
-                        
+                        DisplayCustomerMessage();
 
                     }));
                     
@@ -85,20 +84,24 @@ namespace PizzeriaDOM.Pages
                                      autoAck: true,
                                      consumer: consumerCustomer);
 
-                foreach (string message in CustomerMessage)
-                {
-                    CustomerConsole.Text += message + "\n";
-                }
-
+                DisplayCustomerMessage();
             }
 
+        }
+
+        private void DisplayCustomerMessage()
+        {
+            CustomerConsole.Text = string.Empty;
+            foreach (string message in CustomerMessage)
+            {
+                CustomerConsole.Text += message + "\n";
+            }
         }
 
         private void Kitchen(IConnection connection)
         {
             using (var channelKitchen = connection.CreateModel())
             {
-
                 Trace.WriteLine("Kitchen func");
 
                 var consumerKitchen = new EventingBasicConsumer(channelKitchen);
@@ -107,18 +110,72 @@ namespace PizzeriaDOM.Pages
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
+
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        KitchenConsole.Text += order.ToString();
-                    }));
+                        string msg = $"{order.ID} Time remaining: {order.KitchenCountdown} seconds";
+                        KitchenMessage.Add(order.ID, msg);
+                        // Création d'un timer et définission intervalle = 1s, éxecuter la fonction
+                        kitchenTimer = new DispatcherTimer();
+                        kitchenTimer.Interval = TimeSpan.FromSeconds(1);
+                        kitchenTimer.Tick += (sender, e) =>
+                        {
+                            msg = $"{order.ID} Time remaining: {order.KitchenCountdown} seconds";
+                            // Mettez à jour le message de la console Kitchen
+                            KitchenMessage[order.ID] = msg;
+                            DisplayKitchenMessage();
 
+                            // Réduisez le temps restant
+                            order.KitchenCountdown--;
+
+                            // Si le compte à rebours atteint 0, arrêtez le timer
+                            if (order.KitchenCountdown < 0)
+                            {
+                                kitchenTimer.Stop();
+                                KitchenMessage.Remove(order.ID);
+                                DisplayKitchenMessage();
+                                sendDelivery(order);
+                            }
+                        };
+
+                        kitchenTimer.Start();
+                    }));
                 };
 
-                channelKitchen.BasicConsume(queue: "kitchen",
-                                     autoAck: true,
-                                     consumer: consumerKitchen);
+                channelKitchen.BasicConsume(queue: "kitchen", autoAck: true, consumer: consumerKitchen);
             }
+        }
 
+        private void DisplayKitchenMessage()
+        {
+            KitchenConsole.Text = string.Empty;
+            foreach (var keyValue in KitchenMessage)
+            {
+                KitchenConsole.Text += keyValue.Value + "\n";
+            }
+        }
+
+        private void sendDelivery(Order order)
+        {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Direct", type: ExchangeType.Direct);
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.QueueBind(queue: "delivery",
+                  exchange: "Direct",
+                  routingKey: "delivery"
+                  );
+
+            channel.BasicPublish(exchange: "Direct",
+                                 routingKey: "delivery",
+                                 basicProperties: null,
+                                 body: body);
+
+            Delivery(connection);
         }
 
         private void Clerk(IConnection connection)
