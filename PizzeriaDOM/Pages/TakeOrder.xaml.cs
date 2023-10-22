@@ -266,21 +266,14 @@ namespace PizzeriaDOM.Pages
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
-
-                    Trace.WriteLine(order.ToString());
+                    sendOrder(order);
                 }
                 
             }
-            
-                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
-                    Trace.WriteLine("Avant envoi" + order.ToString());
-                    sendOrder(order);
 
                     
-                }
-                
-            }
-            
+
+                    
         }
 
         private void sendOrder(Order order)
@@ -326,5 +319,10 @@ namespace PizzeriaDOM.Pages
 
             product.size = radioButton.Name;
         }
+
     }
+            
 }
+
+        
+  
