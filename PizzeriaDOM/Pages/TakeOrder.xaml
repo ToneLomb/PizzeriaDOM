@@ -22,7 +22,7 @@
 
         <!--Titre page et nom customer affiché si loadé-->
         <Label Style ="{DynamicResource PageTitle}" Width="265" Content="INCOMING CALLS" Height="50" Margin="192,0,192,400"/>
-        <Label Height="35" Width="350" x:Name ="CustomerName" Style="{DynamicResource Label}" FontSize="18" Margin="10,100,290,315" Content="{Binding Customer.Surname}"></Label>
+        <Label Height="35" Width="350" x:Name ="CustomerName" Style="{DynamicResource Label}" FontSize="18" Margin="10,100,290,315"></Label>
 
         <!-- Boutton pour prendre un appel-->
         <Button Style="{DynamicResource BaseButton}" Height="45" Background="Transparent" Click="takeCall_Click" Width="150" Margin="250,55,250,350">
@@ -39,13 +39,16 @@
                 <TextBlock Style="{DynamicResource FontStyle}" Width="86"><Run Text="Add product"/></TextBlock>
             </StackPanel>
         </Button>
-        
+        <Button Style="{DynamicResource TrashButton}" Name="Delete" Margin="185,140,435,280" Background="Transparent" Width="30" Height="30" BorderBrush="Transparent" Click="Delete_Click">
+            <Path Data="{DynamicResource Trash}" Fill="Red"/>
+        </Button>
+
         <!--Liste de tous les produits qui seront affichés dynamiquement -->
 
         <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="200" Width="600" Margin="0 100 0 0" Padding="0 0 0 0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="450" Margin="0 5 0 0" HorizontalAlignment="Left"> 
+                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="410" Margin="0 5 0 0" HorizontalAlignment="Left"> 
                     <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
 
                         <!-- Contenu de chaque StackPanel -->
@@ -79,9 +82,7 @@
                             <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
                             <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
                         </StackPanel>
-                        <Button Name="Delete" Margin="-30 0 0 0" Background="Transparent" BorderBrush="Transparent">
-                            <Path Data="{DynamicResource Trash}" Fill="Red"/>
-                        </Button>
+                        
 
                         </StackPanel>
                     </Border>
@@ -90,7 +91,7 @@
         </ItemsControl>
 
         <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
-        <Label x:Name="Error" Foreground="Red" Height="30" Width="450" Margin="175,142,25,278"></Label>
+        <Label x:Name="Error" Foreground="Red" Height="30" Width="400" Margin="225,140,25,280"></Label>
         <Button Name="Submit" Style="{DynamicResource BaseButton}" Background="Transparent" Width="100" Height="50" Margin="525,381,25,19" Foreground="Red" Click="Submit_Click">
             SUBMIT ORDER
         </Button>

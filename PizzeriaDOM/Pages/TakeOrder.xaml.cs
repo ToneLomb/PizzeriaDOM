@@ -237,7 +237,12 @@ namespace PizzeriaDOM.Pages
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            if(customer == null)
+            if(clerk == null)
+            {
+                Error.Content = "You must specify a clerk taking the call";
+                return;
+            }
+            else if(customer == null)
             {
                 Error.Content = "There is no customer to take an order";
                 return;
@@ -273,11 +278,9 @@ namespace PizzeriaDOM.Pages
                         totalPrice += price * product.quantity;
                     }
 
-
                     int orderID = IOFile.countOrders();
                     Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products, clerk);
                     List<Object> orders = new List<Object>();
-                    orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
                     IOFile.clerkUpdateManagedOrder(order.Clerk);
                     sendOrder(order);
@@ -301,22 +304,29 @@ namespace PizzeriaDOM.Pages
 
             channel.QueueBind(queue: "kitchen",
                           exchange: "Topic",
-                          routingKey: "kitchen.*.*");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "clerk",
                           exchange: "Topic",
-                          routingKey: "*.clerk.*");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "customer",
                           exchange: "Topic",
-                          routingKey: "*.*.customer");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "security",
                           exchange: "Topic",
-                          routingKey: "*.*.*");
+                          routingKey: "Ordered");
+
+            channel.QueueBind(queue: "delivery",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
 
             string serializedObject = JsonConvert.SerializeObject(order);
             var body = Encoding.UTF8.GetBytes(serializedObject);
 
             channel.BasicPublish(exchange: "Topic",
-                                 routingKey: "kitchen.clerk.customer",
+                                 routingKey: "Ordered",
                                  basicProperties: null,
                                  body: body);
             Trace.WriteLine("Message envoyé");
@@ -365,9 +375,15 @@ namespace PizzeriaDOM.Pages
         private void ResetDisplay()
         {
             customer = null;
-            CustomerName.Content = "";
+            CustomerName.Content = string.Empty;
             Products.Clear();
             productIdCounter = 1;
+            Error.Content = string.Empty;
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            ResetDisplay();
         }
     }
             

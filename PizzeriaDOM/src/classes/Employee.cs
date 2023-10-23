@@ -13,8 +13,6 @@ namespace PizzeriaDOM.src.classes
 
     }
 
-
-
     public class Clerk : Employee
         {
             private int _orderManaged;

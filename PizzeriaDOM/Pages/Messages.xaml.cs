@@ -30,7 +30,6 @@ namespace PizzeriaDOM.Pages
     public partial class Messages : UserControl
     {
         static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
-        static List<String> DeliveryMessage = new List<String>();
         static List<Order> WaitingDelivery = new List<Order>();
 
         private DispatcherTimer kitchenTimer;
@@ -38,7 +37,6 @@ namespace PizzeriaDOM.Pages
         {
             InitializeComponent();
         }
-
         public void LoadMessages()
         {
             var factory = new ConnectionFactory { HostName = "localhost" };
@@ -47,6 +45,7 @@ namespace PizzeriaDOM.Pages
             Customer(connection);
             Kitchen(connection);
             Clerk(connection);
+            Delivery(connection);
         }
 
         private void Security(IConnection connection)
@@ -63,7 +62,6 @@ namespace PizzeriaDOM.Pages
                                      consumer: consumerSecurity);
             }
         }
-
         private void Customer(IConnection connection)
         {
             using (var channelCustomer = connection.CreateModel())
@@ -129,9 +127,7 @@ namespace PizzeriaDOM.Pages
                         kitchenTimer.Start();
                     }));
                 };
-
                 channelKitchen.BasicConsume(queue: "kitchen", autoAck: true, consumer: consumerKitchen);
-
                 DisplayKitchenMessage();
             }
         }
@@ -173,18 +169,27 @@ namespace PizzeriaDOM.Pages
             using (var channelClerk = connection.CreateModel())
             {
 
-                Trace.WriteLine("Clerk func");
-
                 var consumerClerk = new EventingBasicConsumer(channelClerk);
                 consumerClerk.Received += (model, ea) =>
                 {
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
-                    Dispatcher.BeginInvoke(new Action(() =>
+                    if(ea.RoutingKey == "Ordered")
                     {
-                        ClerkConsole.Text += order.ToString();
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            ClerkConsole.Text += "Order No : " + order.ID + " taken by clerk No " + order.Clerk.ID + "\n";
                     }));
+                    }else if (ea.RoutingKey == "Delivered")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            ClerkConsole.Text += "Order No : " + order.ID + " has been closed successfully\n";
+                        }));
+                        
+                    }
+                    
 
                 };
 
@@ -206,21 +211,33 @@ namespace PizzeriaDOM.Pages
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
 
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {           
-                        string msg = "Order No " + order.ID + " received, waiting for delivery\n";
-                        DeliveryConsole.Text += msg;
-                        WaitingDelivery.Add(order);
-                        Task<string> deliveryResult = TryDeliver(order); // Attendre le résultat de TryDeliver
-                        deliveryResult.ContinueWith(taskResult =>
-                        {
-                            string result = taskResult.Result;
-                            Dispatcher.BeginInvoke(new Action(() =>
+                    if(ea.RoutingKey == "delivery")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {           
+                            string msg = "Order No " + order.ID + " received, waiting for delivery\n";
+                            DeliveryConsole.Text += msg;
+                            WaitingDelivery.Add(order);
+                            Task<string> deliveryResult = TryDeliver(order); // Attendre le résultat de TryDeliver
+                            deliveryResult.ContinueWith(taskResult =>
                             {
-                                DeliveryConsole.Text += result +"\n";
-                            } ));
-                        });
-                    }));
+                                string result = taskResult.Result;
+                                Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    DeliveryConsole.Text += result + "\n";
+                                    LoadMessages();
+                                }));
+                            });
+                        }));
+                    }else if (ea.RoutingKey == "Delivered")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            string msg = "DeliveryMan No " + order.DeliveryMan.ID + " earned " + Math.Round(0.1 * order.PriceOrder, 2) + " €";
+                            DeliveryConsole.Text += msg;
+                        }));
+                    }
+                    
                 };
 
                 channelDelivery.BasicConsume(queue: "delivery",
@@ -234,6 +251,7 @@ namespace PizzeriaDOM.Pages
         {
             Trace.WriteLine("Je suis order numéro : " + order.ID);
             string orderStatus = string.Empty;
+            
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3);
             timer.Tick += async (sender, e) =>
@@ -243,6 +261,10 @@ namespace PizzeriaDOM.Pages
                 if (deliveryMan != null)
                 {
                     timer.Stop();
+                    
+                    order.DeliveryMan = deliveryMan;
+                    IOFile.updateOrder(order, "In delivery");
+                    
                     Trace.WriteLine("Delivery trouvé");
                     await Deliver(order, deliveryMan);
                     orderStatus = "Order No " + order.ID + " delivered\n";
@@ -280,9 +302,25 @@ namespace PizzeriaDOM.Pages
             WaitingDelivery.Remove(order);
             await Task.Delay(10000);
             Trace.WriteLine("Fin livraison");
+            
             IOFile.updateOrder(order, "Closed");
             IOFile.updateDeliveryManDisponibility(deliveryMan, true);
             IOFile.deliveryManUpdateManageOrder(deliveryMan);
+
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Topic", type: ExchangeType.Topic);
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.BasicPublish(exchange: "Topic",
+                                 routingKey: "Delivered",
+                                 basicProperties: null,
+                                 body: body);
+
+            
         }
     }
 }
