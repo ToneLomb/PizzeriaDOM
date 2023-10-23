@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PizzeriaDOM.src.classes
 {
-    internal class Order
+    public class Order
     {
         private int _ID;
         private double _priceOrder;

@@ -91,6 +91,7 @@ namespace PizzeriaDOM.src.functions
             }
         }
 
+
         public static void updateDeliveryManDisponibility(DeliveryMan deliveryMan, bool available)
         {
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
@@ -114,6 +115,26 @@ namespace PizzeriaDOM.src.functions
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
             DeliveryMan deliveryMan = deliveryMen.FirstOrDefault(man => man.Available == true);
             return deliveryMan;
+
+        public static void updateOrder(Order order, string state)
+        {
+            List<Order> orderFromFile = ReadFromFile<Order>("Orders");
+
+            Order orderToUpdate = orderFromFile.FirstOrDefault(e => e.ID == order.ID);
+
+            if (orderToUpdate != null)
+            {
+                orderToUpdate.State = state;
+                string updatedList = JsonConvert.SerializeObject(orderFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Orders.json");
+                File.WriteAllText(path, updatedList);
+            }
+            else
+            {
+                return;
+            }
+
         }
     }
 }
