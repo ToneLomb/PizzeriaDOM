@@ -33,7 +33,7 @@ namespace PizzeriaDOM.Pages
 
         public void updateOrderList()
         {
-            orderList = IOFile.ReadFromFile<Order>("Order");
+            orderList = IOFile.ReadFromFile<Order>("Orders");
 
             foreach (Order order in orderList)
             {
