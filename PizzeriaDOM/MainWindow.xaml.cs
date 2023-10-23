@@ -19,6 +19,7 @@ using System.Xml.Serialization;
 using PizzeriaDOM.src.functions;
 using System.IO;
 using RabbitMQ.Client;
+using PizzeriaDOM.Pages;
 
 namespace PizzeriaDOM
 {
@@ -27,19 +28,23 @@ namespace PizzeriaDOM
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private Messages messages;
         public MainWindow()
         {
 
             InitializeComponent();
+            comeToWork();
 
-            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
 
-
+            messages = new Messages();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder(messages);
 
             //Déclaration de files
             var factory = new ConnectionFactory { HostName = "localhost" };
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
+
             channel.QueueDeclare("kitchen", durable: true, exclusive: false, autoDelete: false);
             channel.QueueDeclare("clerk", durable: true, exclusive: false, autoDelete: false);
             channel.QueueDeclare("delivery", durable: true, exclusive: false, autoDelete: false);
@@ -68,7 +73,7 @@ namespace PizzeriaDOM
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder(messages);
             ToggleButtonClick(button1);
         }
 
@@ -86,7 +91,7 @@ namespace PizzeriaDOM
 
         private void Messages_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Pages.Messages();
+            CC.Content = this.messages;
             ToggleButtonClick(Messages);
         }
 
@@ -94,6 +99,15 @@ namespace PizzeriaDOM
         {
             CC.Content = new PizzeriaDOM.Pages.OrderInformations();
             ToggleButtonClick(OrderInformations);
+        }
+
+        private void comeToWork()
+        {
+            List<DeliveryMan> deliveryMen = IOFile.ReadFromFile<DeliveryMan>("DeliveryMan");
+            foreach(DeliveryMan deliveryMan in deliveryMen)
+            {
+                IOFile.updateDeliveryManDisponibility(deliveryMan, true);
+            }
         }
     }
 }
