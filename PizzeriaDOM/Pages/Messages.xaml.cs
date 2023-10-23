@@ -233,7 +233,7 @@ namespace PizzeriaDOM.Pages
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
                         {
-                            string msg = "DeliveryMan No " + order.DeliveryMan.ID + " earned " + Math.Round(0.1 * order.PriceOrder, 2) + " €";
+                            string msg = "DeliveryMan No " + order.DeliveryMan.ID + " earned " + Math.Round(0.1 * order.PriceOrder, 2) + " €\n";
                             DeliveryConsole.Text += msg;
                         }));
                     }
@@ -279,7 +279,7 @@ namespace PizzeriaDOM.Pages
 
             if (WaitingDelivery.Contains(order))
             {
-                orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned\n";
+                orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned";
                 WaitingDelivery.Remove(order);
                 IOFile.updateOrder(order, "Abandonned");
                 timer.Stop();
