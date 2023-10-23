@@ -115,7 +115,6 @@ namespace PizzeriaDOM.src.functions
             return deliveryMan;
         }
 
-            
 
         public static void updateOrder(Order order, string state)
         {

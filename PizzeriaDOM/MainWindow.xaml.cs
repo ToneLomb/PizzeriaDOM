@@ -77,12 +77,6 @@ namespace PizzeriaDOM
             ToggleButtonClick(button1);
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
-        {
-            CC.Content = new PizzeriaDOM.Pages.Kitchen();
-            ToggleButtonClick(button2);
-        }
-
         private void Employee_Click(object sender, RoutedEventArgs e)
         {
             CC.Content = new PizzeriaDOM.Pages.Employee();
