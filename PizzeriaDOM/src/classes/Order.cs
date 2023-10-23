@@ -16,6 +16,7 @@ namespace PizzeriaDOM.src.classes
         private Customer _customer;
         private int _kitchenCountdown = 3;
         private Clerk _clerk;
+        private DeliveryMan _deliveryMan;
 
 
         //DÃ©finir un certain prix selon type / size pizza
@@ -47,6 +48,12 @@ namespace PizzeriaDOM.src.classes
         {
             get => _clerk;
             set => _clerk = value;
+        }
+
+        public DeliveryMan DeliveryMan
+        {
+            get => _deliveryMan;
+            set => _deliveryMan = value;
         }
 
 

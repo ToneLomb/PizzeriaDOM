@@ -25,7 +25,7 @@ namespace PizzeriaDOM.src.functions
                 string combined = fileName + ".json";
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", combined);
 
-                
+
                 if (File.Exists(path))
                 {
                     List<Object> listFromFile = new List<Object>();
@@ -37,10 +37,10 @@ namespace PizzeriaDOM.src.functions
                 }
                 else
                 {
-                    File.WriteAllText(path, JsonConvert.SerializeObject(listToWrite)); 
+                    File.WriteAllText(path, JsonConvert.SerializeObject(listToWrite));
                 }
             }
-            catch ( Exception e)
+            catch (Exception e)
             {
                 Trace.WriteLine(e.ToString());
             }
@@ -66,8 +66,8 @@ namespace PizzeriaDOM.src.functions
                     Trace.WriteLine($"Could not load {fileName}");
                     return new List<T>();
                 }
-            } 
-            catch ( Exception e )
+            }
+            catch (Exception e)
             {
                 Trace.WriteLine(e.ToString());
                 return new List<T>();
@@ -90,15 +90,13 @@ namespace PizzeriaDOM.src.functions
                 return 1;
             }
         }
-
-
         public static void updateDeliveryManDisponibility(DeliveryMan deliveryMan, bool available)
         {
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
 
             DeliveryMan deliveryManToUpdate = deliveryMen.FirstOrDefault(man => man.ID == deliveryMan.ID);
 
-            if (deliveryManToUpdate != null) 
+            if (deliveryManToUpdate != null)
             {
                 deliveryManToUpdate.Available = available;
                 string updatedList = JsonConvert.SerializeObject(deliveryMen);
@@ -106,7 +104,7 @@ namespace PizzeriaDOM.src.functions
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "DeliveryMan.json");
                 File.WriteAllText(path, updatedList);
             }
-            
+
 
         }
 
@@ -115,6 +113,9 @@ namespace PizzeriaDOM.src.functions
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
             DeliveryMan deliveryMan = deliveryMen.FirstOrDefault(man => man.Available == true);
             return deliveryMan;
+
+            
+        }
 
         public static void updateOrder(Order order, string state)
         {
