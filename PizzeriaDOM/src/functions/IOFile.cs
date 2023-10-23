@@ -116,7 +116,6 @@ namespace PizzeriaDOM.src.functions
         }
 
             
-        }
 
         public static void updateOrder(Order order, string state)
         {
