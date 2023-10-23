@@ -282,6 +282,7 @@ namespace PizzeriaDOM.Pages
                     Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products, clerk);
                     List<Object> orders = new List<Object>();
                     IOFile.WriteInFile(orders, "Orders");
+                    IOFile.clerkUpdateManagedOrder(order.Clerk);
                     sendOrder(order);
                     messages.LoadMessages();
 

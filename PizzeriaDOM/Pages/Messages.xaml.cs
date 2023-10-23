@@ -119,6 +119,7 @@ namespace PizzeriaDOM.Pages
                                 kitchenTimer.Stop();
                                 KitchenMessage.Remove(order.ID);
                                 DisplayKitchenMessage();
+                                IOFile.updateOrder(order, "In delivery");
                                 sendDelivery(order);
                             }
                         };
@@ -213,7 +214,7 @@ namespace PizzeriaDOM.Pages
                     if(ea.RoutingKey == "delivery")
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
-                        {
+                        {           
                             string msg = "Order No " + order.ID + " received, waiting for delivery\n";
                             DeliveryConsole.Text += msg;
                             WaitingDelivery.Add(order);
@@ -249,7 +250,8 @@ namespace PizzeriaDOM.Pages
         private async Task<string> TryDeliver(Order order)
         {
             Trace.WriteLine("Je suis order numéro : " + order.ID);
-            string orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned\n";
+            string orderStatus = string.Empty;
+            
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3);
             timer.Tick += async (sender, e) =>
@@ -258,25 +260,37 @@ namespace PizzeriaDOM.Pages
                 DeliveryMan deliveryMan = IOFile.GetDeliveryMan();
                 if (deliveryMan != null)
                 {
+                    timer.Stop();
+                    
                     order.DeliveryMan = deliveryMan;
                     IOFile.updateOrder(order, "In delivery");
+                    
                     Trace.WriteLine("Delivery trouvé");
                     await Deliver(order, deliveryMan);
                     orderStatus = "Order No " + order.ID + " delivered\n";
                     Trace.WriteLine("Statut actualisé");
 
-                    timer.Stop();
                 }
             };
 
             timer.Start();
 
-            await Task.Delay(10000);
+            await Task.Delay(5000);
+
             if (WaitingDelivery.Contains(order))
             {
+                orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned\n";
                 WaitingDelivery.Remove(order);
+                IOFile.updateOrder(order, "Abandonned");
                 timer.Stop();
-
+                return orderStatus;
+            }
+            else 
+            {
+                if (string.IsNullOrEmpty(orderStatus))
+                {
+                    await Task.Delay(12000);
+                }
             }
             return orderStatus;
 
@@ -286,10 +300,12 @@ namespace PizzeriaDOM.Pages
         {
             IOFile.updateDeliveryManDisponibility(deliveryMan, false);
             WaitingDelivery.Remove(order);
-            await Task.Delay(5000);
+            await Task.Delay(10000);
             Trace.WriteLine("Fin livraison");
+            
+            IOFile.updateOrder(order, "Closed");
             IOFile.updateDeliveryManDisponibility(deliveryMan, true);
-
+            IOFile.deliveryManUpdateManageOrder(deliveryMan);
 
             var factory = new ConnectionFactory { HostName = "localhost" };
             using var connection = factory.CreateConnection();
@@ -304,9 +320,8 @@ namespace PizzeriaDOM.Pages
                                  basicProperties: null,
                                  body: body);
 
-
+            
         }
-
     }
-    }
+}
 

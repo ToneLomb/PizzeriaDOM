@@ -113,6 +113,7 @@ namespace PizzeriaDOM.src.functions
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
             DeliveryMan deliveryMan = deliveryMen.FirstOrDefault(man => man.Available == true);
             return deliveryMan;
+        }
 
             
         }
@@ -136,6 +137,36 @@ namespace PizzeriaDOM.src.functions
                 return;
             }
 
+        }
+
+        public static void clerkUpdateManagedOrder(Clerk clerk)
+        {
+            List<Clerk> clerkFromFile = ReadFromFile<Clerk>("Clerk");
+            Clerk clerkToUpdate = clerkFromFile.FirstOrDefault(e => e.ID == clerk.ID);
+
+            if (clerkToUpdate != null)
+            {
+                clerkToUpdate.OrderManaged += 1;
+                string updatedList = JsonConvert.SerializeObject(clerkFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Clerk.json");
+                File.WriteAllText(path, updatedList);
+            }
+        }
+
+        public static void deliveryManUpdateManageOrder(DeliveryMan deliveryMan)
+        {
+            List<DeliveryMan> deliveryManFromFile = ReadFromFile<DeliveryMan>("DeliveryMan");
+            DeliveryMan deliveryManToUpdate = deliveryManFromFile.FirstOrDefault(e => e.ID == deliveryMan.ID);
+
+            if (deliveryManToUpdate != null)
+            {
+                deliveryManToUpdate.OrderManaged += 1;
+                string updatedList = JsonConvert.SerializeObject(deliveryManFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "DeliveryMan.json");
+                File.WriteAllText(path, updatedList);
+            }
         }
     }
 }
