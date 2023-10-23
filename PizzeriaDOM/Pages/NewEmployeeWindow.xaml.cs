@@ -46,9 +46,8 @@ namespace PizzeriaDOM.Pages
             }
             else if (this.selectedText.Equals("Delivery Man"))
             {
-                DeliveryMan new_employee = new DeliveryMan();
-                new_employee.ID = checkFunctions.getEmployeeLastID(selectedType) + 1;
-                new_employee.OrderManaged = 0;
+                int ID = checkFunctions.getEmployeeLastID(selectedType) + 1;
+                DeliveryMan new_employee = new DeliveryMan(0,ID,true);
 
                 list.Add(new_employee);
             }

@@ -41,7 +41,7 @@ namespace PizzeriaDOM.src.functions
             string workingDirectory = Directory.GetCurrentDirectory();
             string combined = fileName + ".json";
             string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", combined);
-            int id = -1;
+            int id = 0;
 
             //search in the corresponding file
             if (File.Exists(path))
@@ -75,7 +75,7 @@ namespace PizzeriaDOM.src.functions
             }
 
             //if the file don't exist
-            return -1;
+            return 0;
 
         }
         public static bool EmptyProductFields(ObservableCollection<ProductPanel> Products)
@@ -90,6 +90,7 @@ namespace PizzeriaDOM.src.functions
             }
             return false;
         }
+
     }
 
     

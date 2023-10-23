@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Packaging;
 using System.Linq;
@@ -34,11 +35,15 @@ namespace PizzeriaDOM.Pages
         public ObservableCollection<ProductPanel> Products { get; set; } = new ObservableCollection<ProductPanel>();
         private int productIdCounter = 1;
 
-        public TakeOrder()
+        Messages messages;
+
+        public TakeOrder(Messages messages)
         {
             InitializeComponent();
             Products = new ObservableCollection<ProductPanel>();
             DataContext = this;
+
+            this.messages = messages;
         }
 
         private Clerk clerk = null;
@@ -47,7 +52,7 @@ namespace PizzeriaDOM.Pages
         public Customer Customer
         {
             get => customer;
-            set => customer = value;
+            set => customer = value;          
         }
 
         public Clerk Clerk
@@ -274,16 +279,16 @@ namespace PizzeriaDOM.Pages
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
-
                     sendOrder(order);
+                    messages.LoadMessages();
 
+                    ResetDisplay();
+                    
                 }
                 
             }
-                    
-
-                    
-                }
+           
+        }
 
         private void sendOrder(Order order)
         {
@@ -355,8 +360,17 @@ namespace PizzeriaDOM.Pages
 
             ClerkList.IsOpen = true;
         }
+
+        private void ResetDisplay()
+        {
+            customer = null;
+            CustomerName.Content = "";
+            Products.Clear();
+            productIdCounter = 1;
+        }
     }
             
-        }
+}
 
         
+  

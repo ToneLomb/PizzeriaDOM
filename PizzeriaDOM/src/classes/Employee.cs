@@ -43,6 +43,14 @@ namespace PizzeriaDOM.src.classes
         {
             private int _orderDelivered;
             private int _ID;
+            private bool _available;
+
+        public DeliveryMan(int orderDelivered, int ID, bool available)
+        {
+            this._ID = ID;
+            this._orderDelivered = orderDelivered;
+            this._available = available;
+        }
 
             public override int OrderManaged
             {
@@ -54,6 +62,12 @@ namespace PizzeriaDOM.src.classes
             {
                 get => _ID;
                 set => _ID = value;
+            }
+
+            public bool Available
+            {
+                get => _available;
+                set => _available = value;
             }
 
             public string typeName
