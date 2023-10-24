@@ -8,5 +8,6 @@
              d:DesignHeight="450" d:DesignWidth="650">
 	<Grid Background="#45455F">
 		<TextBlock>Kitchen</TextBlock>
-	</Grid>
+        <TextBlock Name="MessageBox" HorizontalAlignment="Left" Height="69" Margin="85,92,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="134"/>
+    </Grid>
 </UserControl>

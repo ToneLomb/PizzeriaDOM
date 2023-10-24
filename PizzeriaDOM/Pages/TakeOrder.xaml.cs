@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,33 +17,48 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
     /// <summary>
     /// Logique d'interaction pour TakeOrder.xaml
     /// </summary>
+        
+    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
         public ObservableCollection<ProductPanel> Products { get; set; } = new ObservableCollection<ProductPanel>();
         private int productIdCounter = 1;
 
-        public TakeOrder()
+        Messages messages;
+
+        public TakeOrder(Messages messages)
         {
             InitializeComponent();
             Products = new ObservableCollection<ProductPanel>();
             DataContext = this;
+
+            this.messages = messages;
         }
 
+        private Clerk clerk = null;
         private Customer customer = null;
 
         public Customer Customer
         {
             get => customer;
-            set => customer = value;
+            set => customer = value;          
+        }
+
+        public Clerk Clerk
+        {
+            get => clerk;
+            set => clerk = value;
         }
 
         private void takeCall_Click(object sender, RoutedEventArgs e)
@@ -87,7 +104,6 @@ namespace PizzeriaDOM.Pages
             //Set du groupName unique des radioBouttons
             productIdCounter++;
         }
-
         //Les deux méthodes ci dessous permettent de mettre le placeholder "Search ..."
         private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -221,7 +237,12 @@ namespace PizzeriaDOM.Pages
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            if(customer == null)
+            if(clerk == null)
+            {
+                Error.Content = "You must specify a clerk taking the call";
+                return;
+            }
+            else if(customer == null)
             {
                 Error.Content = "There is no customer to take an order";
                 return;
@@ -257,12 +278,59 @@ namespace PizzeriaDOM.Pages
                         totalPrice += price * product.quantity;
                     }
 
-                    Order order = new Order(1,customer.TelephoneNumber,totalPrice,"In preparation",DateTime.Now,products);
-                    Trace.WriteLine(order.ToString());
+                    int orderID = IOFile.countOrders();
+                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products, clerk);
+                    List<Object> orders = new List<Object>();
+                    orders.Add(order);
+                    IOFile.WriteInFile(orders, "Orders");
+                    IOFile.clerkUpdateManagedOrder(order.Clerk);
+                    sendOrder(order);
+                    messages.LoadMessages();
+
+                    ResetDisplay();
+                    
                 }
                 
             }
-            
+           
+        }
+
+        private void sendOrder(Order order)
+        {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Topic", type: ExchangeType.Topic);
+
+
+            channel.QueueBind(queue: "kitchen",
+                          exchange: "Topic",
+                          routingKey: "Ordered");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "Ordered");
+            channel.QueueBind(queue: "customer",
+                          exchange: "Topic",
+                          routingKey: "Ordered");
+            channel.QueueBind(queue: "security",
+                          exchange: "Topic",
+                          routingKey: "Ordered");
+
+            channel.QueueBind(queue: "delivery",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.BasicPublish(exchange: "Topic",
+                                 routingKey: "Ordered",
+                                 basicProperties: null,
+                                 body: body);
+            Trace.WriteLine("Message envoyé");
         }
 
         private void Size_Click(object sender, RoutedEventArgs e)
@@ -274,5 +342,53 @@ namespace PizzeriaDOM.Pages
 
             product.size = radioButton.Name;
         }
+
+        private void choseClerkList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox chosenList = (ListBox)sender;
+            string chosenClerk = chosenList.SelectedItem.ToString();
+            choseClerk.Content = chosenClerk;
+            string id = chosenClerk.Split(" ")[1];
+
+            List<Clerk> clerkList = IOFile.ReadFromFile<Clerk>("Clerk");
+
+            clerk = clerkList.FirstOrDefault(e => e.ID == int.Parse(id));
+        }
+
+        private void choseClerk_Click(object sender, RoutedEventArgs e)
+        {
+            ListBox list = choseClerkList;
+
+            List<Clerk> clerkList= IOFile.ReadFromFile<Clerk>("Clerk");
+
+            List<string> clerkNames = new List<string>();
+
+            foreach (Clerk clerk in clerkList)
+            {
+                clerkNames.Add(clerk.typeName + " " + clerk.ID);
+            }
+
+            list.ItemsSource = clerkNames;
+
+            ClerkList.IsOpen = true;
+        }
+
+        private void ResetDisplay()
+        {
+            customer = null;
+            CustomerName.Content = string.Empty;
+            Products.Clear();
+            productIdCounter = 1;
+            Error.Content = string.Empty;
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            ResetDisplay();
+        }
     }
+            
 }
+
+        
+  

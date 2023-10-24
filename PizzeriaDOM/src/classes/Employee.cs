@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace PizzeriaDOM.src.classes
 {
-    internal abstract class Employee
+    public abstract class Employee
     {
         public abstract int OrderManaged { get; set; }
         public abstract int ID { get; set; }
 
     }
 
-
-
-    internal class Clerk : Employee
+    public class Clerk : Employee
         {
             private int _orderManaged;
             private int _ID;
@@ -39,10 +37,18 @@ namespace PizzeriaDOM.src.classes
     }
 
 
-        internal class DeliveryMan : Employee
+        public class DeliveryMan : Employee
         {
             private int _orderDelivered;
             private int _ID;
+            private bool _available;
+
+        public DeliveryMan(int orderDelivered, int ID, bool available)
+        {
+            this._ID = ID;
+            this._orderDelivered = orderDelivered;
+            this._available = available;
+        }
 
             public override int OrderManaged
             {
@@ -54,6 +60,12 @@ namespace PizzeriaDOM.src.classes
             {
                 get => _ID;
                 set => _ID = value;
+            }
+
+            public bool Available
+            {
+                get => _available;
+                set => _available = value;
             }
 
             public string typeName

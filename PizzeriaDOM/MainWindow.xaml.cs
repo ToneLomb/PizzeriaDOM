@@ -18,6 +18,8 @@ using System.Windows.Shapes;
 using System.Xml.Serialization;
 using PizzeriaDOM.src.functions;
 using System.IO;
+using RabbitMQ.Client;
+using PizzeriaDOM.Pages;
 
 namespace PizzeriaDOM
 {
@@ -26,11 +28,30 @@ namespace PizzeriaDOM
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private Messages messages;
         public MainWindow()
         {
 
             InitializeComponent();
-            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
+            comeToWork();
+
+
+            messages = new Messages();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder(messages);
+
+            //Déclaration de files
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+
+            channel.QueueDeclare("kitchen", durable: true, exclusive: false, autoDelete: false);
+            channel.QueueDeclare("clerk", durable: true, exclusive: false, autoDelete: false);
+            channel.QueueDeclare("delivery", durable: true, exclusive: false, autoDelete: false);
+            channel.QueueDeclare("customer", durable: true, exclusive: false, autoDelete: false);
+            channel.QueueDeclare("security", durable: true, exclusive: false, autoDelete: false);
+
+
         }
 
         private void ToggleButtonClick(ToggleButton selectedButton)
@@ -52,14 +73,8 @@ namespace PizzeriaDOM
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Pages.TakeOrder();
+            CC.Content = new PizzeriaDOM.Pages.TakeOrder(messages);
             ToggleButtonClick(button1);
-        }
-
-        private void button2_Click(object sender, RoutedEventArgs e)
-        {
-            CC.Content = new PizzeriaDOM.Pages.Kitchen();
-            ToggleButtonClick(button2);
         }
 
         private void Employee_Click(object sender, RoutedEventArgs e)
@@ -70,7 +85,7 @@ namespace PizzeriaDOM
 
         private void Messages_Click(object sender, RoutedEventArgs e)
         {
-            CC.Content = new PizzeriaDOM.Pages.Messages();
+            CC.Content = this.messages;
             ToggleButtonClick(Messages);
         }
 
@@ -78,6 +93,15 @@ namespace PizzeriaDOM
         {
             CC.Content = new PizzeriaDOM.Pages.OrderInformations();
             ToggleButtonClick(OrderInformations);
+        }
+
+        private void comeToWork()
+        {
+            List<DeliveryMan> deliveryMen = IOFile.ReadFromFile<DeliveryMan>("DeliveryMan");
+            foreach(DeliveryMan deliveryMan in deliveryMen)
+            {
+                IOFile.updateDeliveryManDisponibility(deliveryMan, true);
+            }
         }
     }
 }

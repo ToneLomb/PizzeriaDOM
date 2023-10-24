@@ -39,13 +39,16 @@
                 <TextBlock Style="{DynamicResource FontStyle}" Width="86"><Run Text="Add product"/></TextBlock>
             </StackPanel>
         </Button>
-        
+        <Button Style="{DynamicResource TrashButton}" Name="Delete" Margin="185,140,435,280" Background="Transparent" Width="30" Height="30" BorderBrush="Transparent" Click="Delete_Click">
+            <Path Data="{DynamicResource Trash}" Fill="Red"/>
+        </Button>
+
         <!--Liste de tous les produits qui seront affichés dynamiquement -->
 
         <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="200" Width="600" Margin="0 100 0 0" Padding="0 0 0 0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="450" Margin="0 5 0 0" HorizontalAlignment="Left"> 
+                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="410" Margin="0 5 0 0" HorizontalAlignment="Left"> 
                     <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
 
                         <!-- Contenu de chaque StackPanel -->
@@ -55,6 +58,7 @@
                         <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
                         </RadioButton>
                         <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0" Checked="Pizza_Checked" Unchecked="Pizza_UnChecked">
+
                         </RadioButton>
 
 
@@ -78,9 +82,7 @@
                             <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
                             <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
                         </StackPanel>
-                        <Button Name="Delete" Margin="-30 0 0 0" Background="Transparent" BorderBrush="Transparent">
-                            <Path Data="{DynamicResource Trash}" Fill="Red"/>
-                        </Button>
+                        
 
                         </StackPanel>
                     </Border>
@@ -89,10 +91,13 @@
         </ItemsControl>
 
         <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
-        <Label x:Name="Error" Foreground="Red" Height="30" Width="450" Margin="175,142,25,278"></Label>
+        <Label x:Name="Error" Foreground="Red" Height="30" Width="400" Margin="225,140,25,280"></Label>
         <Button Name="Submit" Style="{DynamicResource BaseButton}" Background="Transparent" Width="100" Height="50" Margin="525,381,25,19" Foreground="Red" Click="Submit_Click">
             SUBMIT ORDER
         </Button>
-        
+        <Button x:Name="choseClerk" Height="50" Width="80"  Click="choseClerk_Click" Content="Chose clerk" Margin="525,25,45,375"/>
+        <Popup x:Name="ClerkList" PlacementTarget="{Binding ElementName=choseClerk}" StaysOpen="False">
+            <ListBox x:Name="choseClerkList" SelectionChanged="choseClerkList_SelectionChanged"/>
+        </Popup>
     </Grid>
 </UserControl>
