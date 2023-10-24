@@ -14,34 +14,34 @@ namespace PizzeriaDOM.src.classes
     }
 
     public class Clerk : Employee
+    {
+        private int _orderManaged;
+        private int _ID;
+
+        public override int OrderManaged
         {
-            private int _orderManaged;
-            private int _ID;
+            get => _orderManaged;
+            set => _orderManaged = value;
+        }
 
-            public override int OrderManaged
-            {
-                get => _orderManaged;
-                set => _orderManaged = value;
-            }
+        public override int ID
+        {
+            get => _ID;
+            set => _ID = value;
+        }
 
-            public override int ID
-            {
-                get => _ID;
-                set => _ID = value;
-            }
-
-            public string typeName
-            {
-                get { return this.GetType().Name; }
-            }
+        public string typeName
+        {
+            get { return this.GetType().Name; }
+        }
     }
 
 
-        public class DeliveryMan : Employee
-        {
-            private int _orderDelivered;
-            private int _ID;
-            private bool _available;
+    public class DeliveryMan : Employee
+    {
+        private int _orderDelivered;
+        private int _ID;
+        private bool _available;
 
         public DeliveryMan(int orderDelivered, int ID, bool available)
         {
@@ -50,27 +50,27 @@ namespace PizzeriaDOM.src.classes
             this._available = available;
         }
 
-            public override int OrderManaged
-            {
-                get => _orderDelivered;
-                set => _orderDelivered = value;
-            }
+        public override int OrderManaged
+        {
+            get => _orderDelivered;
+            set => _orderDelivered = value;
+        }
 
-            public override int ID
-            {
-                get => _ID;
-                set => _ID = value;
-            }
+        public override int ID
+        {
+            get => _ID;
+            set => _ID = value;
+        }
 
-            public bool Available
-            {
-                get => _available;
-                set => _available = value;
-            }
+        public bool Available
+        {
+            get => _available;
+            set => _available = value;
+        }
 
-            public string typeName
-            {
-                get { return this.GetType().Name; }
-            }
+        public string typeName
+        {
+            get { return this.GetType().Name; }
+        }
     }
 }

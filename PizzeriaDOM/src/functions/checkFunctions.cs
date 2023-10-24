@@ -30,7 +30,7 @@ namespace PizzeriaDOM.src.functions
                 else { return null; }
             }
             else { return null; }
-            
+
 
         }
 
@@ -63,7 +63,7 @@ namespace PizzeriaDOM.src.functions
                 {
                     List<DeliveryMan> listFromFile = IOFile.ReadFromFile<DeliveryMan>("DeliveryMan");
                     foreach (DeliveryMan deliveryMan in listFromFile)
-                    { 
+                    {
                         if (deliveryMan.ID > id)
                         {
                             id = deliveryMan.ID;
@@ -93,5 +93,5 @@ namespace PizzeriaDOM.src.functions
 
     }
 
-    
+
 }
