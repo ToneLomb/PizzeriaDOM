@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    
     <Grid Background="#45455F">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -28,22 +29,22 @@
 
         <Label Style="{DynamicResource PageTitle}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="MESSAGES" HorizontalAlignment="Center" />
         
-        <Label Style="{DynamicResource PageTitle}" Grid.Row="1" Grid.Column="0" Content="Customer" HorizontalAlignment="Center" />
+        <Label Style="{DynamicResource SubTitle}" Grid.Row="1" Grid.Column="0" Content="Customer" HorizontalAlignment="Center" />
         <ScrollViewer Grid.Row="2" Grid.Column="0" Style="{DynamicResource ScrollViewerTemplate}">
             <TextBlock Name="CustomerConsole" Style="{DynamicResource MessageConsoleTemplate}" />
         </ScrollViewer>
         
-        <Label Style="{DynamicResource PageTitle}" Grid.Row="1" Grid.Column="1" Content="Clerk" HorizontalAlignment="Center" />
+        <Label Style="{DynamicResource SubTitle}" Grid.Row="1" Grid.Column="1" Content="Clerk" HorizontalAlignment="Center" />
         <ScrollViewer Grid.Row="2" Grid.Column="1" Style="{DynamicResource ScrollViewerTemplate}">
             <TextBlock Name="ClerkConsole" Style="{DynamicResource MessageConsoleTemplate}" />
         </ScrollViewer>
         
-        <Label Style="{DynamicResource PageTitle}" Grid.Row="3" Grid.Column="0" Content="Kitchen" HorizontalAlignment="Center" />
+        <Label Style="{DynamicResource SubTitle}" Grid.Row="3" Grid.Column="0" Content="Kitchen" HorizontalAlignment="Center" />
         <ScrollViewer Grid.Row="4" Grid.Column="0" Style="{DynamicResource ScrollViewerTemplate}">
             <TextBlock Name="KitchenConsole" Style="{DynamicResource MessageConsoleTemplate}" />
         </ScrollViewer>
 
-        <Label Style="{DynamicResource PageTitle}" Grid.Row="3" Grid.Column="1" Content="Delivery" HorizontalAlignment="Center" />
+        <Label Style="{DynamicResource SubTitle}" Grid.Row="3" Grid.Column="1" Content="Delivery" HorizontalAlignment="Center" />
         <ScrollViewer Grid.Row="4" Grid.Column="1" Style="{DynamicResource ScrollViewerTemplate}">
             <TextBlock Name="DeliveryConsole" Style="{DynamicResource MessageConsoleTemplate}" />
         </ScrollViewer>

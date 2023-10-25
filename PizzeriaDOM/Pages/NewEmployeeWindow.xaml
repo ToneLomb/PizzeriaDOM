@@ -5,26 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PizzeriaDOM.Pages"
         mc:Ignorable="d"
-        Title="Add New Employee" Height="Auto"  Width="Auto" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
-    <Grid>
+        Title="Add New Employee" ResizeMode="NoResize" Width="200" SizeToContent="Height" AllowsTransparency="True" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Background="#505468">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<!-- Row for TextBlock -->
-			<RowDefinition Height="Auto" />
-			<!-- Row for TextBox 1 -->
-			<RowDefinition Height="Auto" />
-			<!-- Row for Button -->
-		</Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<!-- Column for Labels -->
-			<ColumnDefinition Width="Auto" />
-			<!-- Column for Inputs -->
-		</Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="New Employee's Informations" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="New Employee's Informations" Style="{DynamicResource Label}" />
 
-        <Label Grid.Row="1" Grid.Column="0" Content="Type" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Type" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" />
         <ComboBox Grid.Row="1" Grid.Column="1" Name="TypeEmployee" Width="100" Height="25" Margin="10" SelectionChanged="TypeEmployee_SelectionChanged">
             <ComboBoxItem>Clerk</ComboBoxItem>
             <ComboBoxItem>Delivery Man</ComboBoxItem>

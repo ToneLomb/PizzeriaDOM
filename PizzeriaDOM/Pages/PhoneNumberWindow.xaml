@@ -20,11 +20,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    
     <Grid Background="#505468">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Style ="{DynamicResource Label}" HorizontalAlignment="Center" x:Name="LabelPhoneNumber" Height="30" Width="160" Margin="0,10,0,59">Customer's phone number :</Label>
+        <Label Style ="{DynamicResource Label}" x:Name="LabelPhoneNumber" Height="30" Width="160" Margin="0,10,0,59">Customer's phone number :</Label>
         <Label Width="160" Name="Error" Foreground="red" FontWeight="Bold" Height="26" FontSize="12" Margin="20,25,20,51"></Label>
         <TextBox Style ="{DynamicResource TextBoxInput}" Name="TextPhoneNumber" Height="25" Width="160" KeyDown="TextBox_KeyDown" Margin="20,54,20,19"></TextBox>
     </Grid>
