@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
 
 namespace PizzeriaDOM.Pages
 {
-    /// <summary>
-    /// Logique d'interaction pour OrderInformations.xaml
-    /// </summary>
     public partial class OrderInformations : UserControl
     {
         List<Order> orderList = new List<Order>();
@@ -43,8 +30,6 @@ namespace PizzeriaDOM.Pages
 
         private void ComboID_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            updateOrderList();
-
             ComboBox comboBox = (ComboBox)sender;
             ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
 
@@ -54,19 +39,54 @@ namespace PizzeriaDOM.Pages
             //get the order with the selected ID
             Order selectedOrder = orderList.Find(order => order.ID == selectedID);
 
-            //CustomerNumberTextBlock.Text = selectedOrder.CustomerTelephoneNumber;
+            //Customer number
+            CustomerNumberTextBlock.Text = selectedOrder.Customer.TelephoneNumber.ToString();
 
-            TotalPriceTextBlock.Text = selectedOrder.PriceOrder.ToString();
+            //Total price
+            TotalPriceTextBlock.Text = selectedOrder.PriceOrder.ToString() + " €";
 
+            //Status
             StatusTextBlock.Text = selectedOrder.State;
-            //add changing color depending on the status ?
 
+            //Date
             DateTextblock.Text = selectedOrder.DateOrder.ToString();
 
-            List<Order.Product> productList = selectedOrder.ProductList;
+            //product list
+            //create 2 lists, one for pizza and one for drinks
+            List<Order.Product> availablePizzas = IOFile.ReadFromFile<Order.Product>("Pizza");
+            List<Order.Product> availableDrinks = IOFile.ReadFromFile<Order.Product>("Drinks");
 
-            //display the list of product in the order
-            //TODO
+            List<string> AvailablePizzasName = new List<string>();
+            List<string> AvailableDrinksName = new List<string>();
+
+            foreach (Order.Product pizza in availablePizzas)
+            {
+                AvailablePizzasName.Add(pizza.Name);
+            }
+            foreach (Order.Product drink in availableDrinks)
+            {
+                AvailableDrinksName.Add(drink.Name);
+            }
+
+            List<object> pizzaList = new List<object>();
+            List<Order.Product> drinkList = new List<Order.Product>();
+
+            //if pizzaList.Name == a string in AvailablePizzasName, add it to pizzaList
+            foreach (Order.Product product in selectedOrder.ProductList)
+            {
+                if (AvailablePizzasName.Contains(product.Name))
+                {
+                    pizzaList.Add(product);
+                }
+                else
+                {
+                    drinkList.Add(product);
+                }
+            }
+
+            //display pizza list in PizzaListView
+            PizzaListView.ItemsSource = pizzaList;
+            DrinkListView.ItemsSource = drinkList;
         }
     }
 }

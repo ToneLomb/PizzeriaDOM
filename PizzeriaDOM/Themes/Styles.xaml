@@ -15,9 +15,17 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
+    <Style x:Key="SubTitle" TargetType="Label">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="23" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
     <Style x:Key="Label" TargetType="Label">
         <Setter Property="Foreground" Value="#F79256"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
 
@@ -198,7 +206,7 @@
 
     <!--Style for the label in OrderInformations.xaml-->
     <Style x:Key="OrderLabelTemplate" TargetType="{x:Type Label}">
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="5" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="20" />
@@ -206,7 +214,7 @@
 
     <!--Style for the TextBlock in OrderInformations.xaml-->
     <Style x:Key="OrderTextBlockTemplate" TargetType="{x:Type TextBlock}">
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="5" />
         <Setter Property="FontSize" Value="20" />
     </Style>
     
@@ -248,6 +256,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!--Style for the TextBlock in Statistics.xaml-->
+    <Style x:Key="StatDisplay" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="20"/>
     </Style>
 
 </ResourceDictionary>

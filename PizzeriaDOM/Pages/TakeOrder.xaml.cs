@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO.Packaging;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
@@ -24,11 +15,6 @@ using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
-    /// <summary>
-    /// Logique d'interaction pour TakeOrder.xaml
-    /// </summary>
-
-    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -269,6 +255,7 @@ namespace PizzeriaDOM.Pages
                         string size = product.size;
                         string productName = product.selectedProduct;
                         double price = 0;
+                        int quantity = product.quantity;
                         if (product.IsBoissonSelected)
                         {
                             price = tools.getPrice(productName, "Drinks", size);
@@ -277,7 +264,7 @@ namespace PizzeriaDOM.Pages
                         {
                             price = tools.getPrice(productName, "Pizza", size);
                         }
-                        products.Add(new Order.Product(size, productName, price));
+                        products.Add(new Order.Product(size, productName, price, quantity));
                         totalPrice += price * product.quantity;
                     }
 
@@ -333,7 +320,7 @@ namespace PizzeriaDOM.Pages
                                  routingKey: "Ordered",
                                  basicProperties: null,
                                  body: body);
-            Trace.WriteLine("Message envoyé");
+            Trace.WriteLine("TakeOrder.xaml.cs : Message envoyé");
         }
 
         private void Size_Click(object sender, RoutedEventArgs e)
