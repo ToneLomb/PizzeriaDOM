@@ -58,11 +58,30 @@
             <ListView.Margin>
                 <Thickness Left="10" Bottom="10"/>
             </ListView.Margin>
-        </ListView>
+            <ListView.View>
+                <GridView>
+                    <!-- Define columns for your data -->
+                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" />
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" />
+                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                </GridView>
+             </ListView.View>
+            </ListView>
+        
         <ListView Name="DrinkListView" Grid.Row="7" Grid.Column="1">
             <ListView.Margin>
                 <Thickness Right="10" Bottom="10"/>
             </ListView.Margin>
+            <ListView.View>
+                <GridView>
+                    <!-- Define columns for your data -->
+                    <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="Auto" />
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price}" Width="Auto"/>
+                    <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="Auto"/>
+                </GridView>
+            </ListView.View>
         </ListView>
     </Grid>
 </UserControl>

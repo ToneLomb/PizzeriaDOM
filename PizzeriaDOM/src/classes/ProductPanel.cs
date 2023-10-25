@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.ComponentModel;
 
 namespace PizzeriaDOM.src.classes
 {
     public class ProductPanel : INotifyPropertyChanged
     {
-        public int ID {  get; set; }
+        public int ID { get; set; }
         public string sizeGroup { get; set; }
         public string productName { get; set; }
         public string selectedProduct { get; set; }
-        public string size {  get; set; }
-        
+        public string size { get; set; }
+
         public int quantity = 1;
         public int Quantity
         {
@@ -34,7 +28,7 @@ namespace PizzeriaDOM.src.classes
             {
                 //Si l'ancienne valeur est effectivement différente de la nouvelle
                 if (isBoissonSelected != value)
-                {   
+                {
                     //Alors on la met à jour et on appelle la méthode OnPropertyChanged en lui indiquant le nom de la propriété qui a changé
                     isBoissonSelected = value;
                     OnPropertyChanged(nameof(IsBoissonSelected));

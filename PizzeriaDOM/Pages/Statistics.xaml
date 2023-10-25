@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="PizzeriaDOM.Pages.Statistics"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PizzeriaDOM.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Grid Background="#45455F">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Statistics" Style="{DynamicResource PageTitle}" HorizontalAlignment="Center" />
+
+        <Label Grid.Row="1" Grid.Column="0"  Content="Average order price" Style="{DynamicResource SubTitle}" />
+        <TextBlock Name="AverageOrder" Grid.Row="2" Grid.Column="0" Style="{DynamicResource StatDisplay}" />
+
+        <Label Grid.Row="1" Grid.Column="1" Content="Average account receivable" Style="{DynamicResource SubTitle}" />
+        <TextBlock Name="AverageAccount" Grid.Row="2" Grid.Column="1" Style="{DynamicResource StatDisplay}" />
+
+        <Label Grid.Row="3" Grid.ColumnSpan="2" Content="Orders by time period" Style="{DynamicResource SubTitle}" HorizontalAlignment="Center" />
+        <ListView Name="OrderList" Grid.Row="4" Grid.ColumnSpan="2">
+            <ListView.Margin>
+                <Thickness Left="10" Bottom="10" Right="10" />
+            </ListView.Margin>
+            <ListView.View>
+                <GridView>
+                    <!-- Define columns for your data -->
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="Total price" DisplayMemberBinding="{Binding PriceOrder}" />
+                    <GridViewColumn Header="state" DisplayMemberBinding="{Binding State}" />
+                    <GridViewColumn Header="DateOrder" DisplayMemberBinding="{Binding DateOrder}">
+                        <!--Link event handler-->
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Customer number" DisplayMemberBinding="{Binding Customer.TelephoneNumber}" />
+                    <GridViewColumn Header="Clerk" DisplayMemberBinding="{Binding Clerk.ID}" />
+                    <GridViewColumn Header="Delivery Man" DisplayMemberBinding="{Binding DeliveryMan.ID}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

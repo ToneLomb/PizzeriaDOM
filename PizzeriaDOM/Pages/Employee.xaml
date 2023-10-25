@@ -20,6 +20,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        
         <Label Style="{DynamicResource PageTitle}" Grid.Row="0" Content="EMPLOYEES" HorizontalAlignment="Center" />
 
         <ListView Style="{DynamicResource ListViewTemplate}" Grid.Row="1" Name="employeeListView" >
@@ -33,9 +34,8 @@
             </ListView.View>
         </ListView>
 
-
-        <Button Grid.Row="2" Click="NewEmployee_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">New Employee</Button>
-		
-        
-	</Grid>
+        <Button Grid.Row="2" Click="NewEmployee_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+            New Employee
+        </Button>
+    </Grid>
 </UserControl>

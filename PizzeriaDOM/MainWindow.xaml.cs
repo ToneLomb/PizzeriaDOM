@@ -1,31 +1,13 @@
-﻿using PizzeriaDOM.src.classes;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Serialization;
-using PizzeriaDOM.src.functions;
-using System.IO;
-using RabbitMQ.Client;
 using PizzeriaDOM.Pages;
+using PizzeriaDOM.src.classes;
+using PizzeriaDOM.src.functions;
+using RabbitMQ.Client;
 
 namespace PizzeriaDOM
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
@@ -71,10 +53,10 @@ namespace PizzeriaDOM
             selectedButton.IsChecked = true;
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void TakeOrder_Click(object sender, RoutedEventArgs e)
         {
             CC.Content = new PizzeriaDOM.Pages.TakeOrder(messages);
-            ToggleButtonClick(button1);
+            ToggleButtonClick(TakeOrder);
         }
 
         private void Employee_Click(object sender, RoutedEventArgs e)
@@ -102,6 +84,12 @@ namespace PizzeriaDOM
             {
                 IOFile.updateDeliveryManDisponibility(deliveryMan, true);
             }
+        }
+
+        private void Statistics_Click(object sender, RoutedEventArgs e)
+        {
+            CC.Content = new PizzeriaDOM.Pages.Statistics();
+            ToggleButtonClick(Statistics);
         }
     }
 }

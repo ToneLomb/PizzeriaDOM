@@ -1,11 +1,9 @@
-﻿using PizzeriaDOM.src.classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PizzeriaDOM.src.classes;
 
 namespace PizzeriaDOM.src.functions
 {
@@ -30,7 +28,7 @@ namespace PizzeriaDOM.src.functions
                 else { return null; }
             }
             else { return null; }
-            
+
 
         }
 
@@ -63,7 +61,7 @@ namespace PizzeriaDOM.src.functions
                 {
                     List<DeliveryMan> listFromFile = IOFile.ReadFromFile<DeliveryMan>("DeliveryMan");
                     foreach (DeliveryMan deliveryMan in listFromFile)
-                    { 
+                    {
                         if (deliveryMan.ID > id)
                         {
                             id = deliveryMan.ID;
@@ -93,5 +91,5 @@ namespace PizzeriaDOM.src.functions
 
     }
 
-    
+
 }

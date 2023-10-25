@@ -1,32 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace PizzeriaDOM.Pages
 {
-    /// <summary>
-    /// Logique d'interaction pour Messages.xaml
-    /// </summary>
     public partial class Messages : UserControl
     {
         static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
@@ -249,26 +235,27 @@ namespace PizzeriaDOM.Pages
 
         private async Task<string> TryDeliver(Order order)
         {
-            Trace.WriteLine("Je suis order numéro : " + order.ID);
             string orderStatus = string.Empty;
             
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3);
             timer.Tick += async (sender, e) =>
             {
-                Trace.WriteLine("Check d'un delivery dispo pour order " + order.ID);
+                Trace.WriteLine("Messages.xaml.cs : Check d'un deliveryMan dispo pour livrer la commande : " + order.ID);
                 DeliveryMan deliveryMan = IOFile.GetDeliveryMan();
                 if (deliveryMan != null)
                 {
                     timer.Stop();
+
+                    IOFile.assignDeliveryMan(deliveryMan, order);
                     
                     order.DeliveryMan = deliveryMan;
                     IOFile.updateOrder(order, "In delivery");
                     
-                    Trace.WriteLine("Delivery trouvé");
+                    Trace.WriteLine("Messages.xaml.cs : Delivery trouvé");
                     await Deliver(order, deliveryMan);
                     orderStatus = "Order No " + order.ID + " delivered\n";
-                    Trace.WriteLine("Statut actualisé");
+                    Trace.WriteLine("Messages.xaml.cs : Statut de la commande actualisé");
 
                 }
             };
@@ -301,7 +288,7 @@ namespace PizzeriaDOM.Pages
             IOFile.updateDeliveryManDisponibility(deliveryMan, false);
             WaitingDelivery.Remove(order);
             await Task.Delay(10000);
-            Trace.WriteLine("Fin livraison");
+            Trace.WriteLine("Messages.xaml.cs : Fin livraison");
             
             IOFile.updateOrder(order, "Closed");
             IOFile.updateDeliveryManDisponibility(deliveryMan, true);
