@@ -188,8 +188,6 @@
     <!--Style for ListView-->
     <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
         <Setter Property="Margin" Value="10" />
-        <!--add a property to not allow the resize of the column and make it so all the column have the same width-->
-        <Setter Property="GridViewColumnHeader.IsHitTestVisible" Value="False" />
     </Style>
 
     <!--Style for the ScrollViewer in Message.xaml-->
