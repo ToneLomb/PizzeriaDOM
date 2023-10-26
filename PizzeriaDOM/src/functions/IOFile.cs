@@ -1,15 +1,10 @@
-﻿using Newtonsoft.Json;
-using PizzeriaDOM.src.classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PizzeriaDOM.src.classes;
 
 namespace PizzeriaDOM.src.functions
 {
@@ -25,7 +20,7 @@ namespace PizzeriaDOM.src.functions
                 string combined = fileName + ".json";
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", combined);
 
-                
+
                 if (File.Exists(path))
                 {
                     List<Object> listFromFile = new List<Object>();
@@ -37,12 +32,12 @@ namespace PizzeriaDOM.src.functions
                 }
                 else
                 {
-                    File.WriteAllText(path, JsonConvert.SerializeObject(listToWrite)); 
+                    File.WriteAllText(path, JsonConvert.SerializeObject(listToWrite));
                 }
             }
-            catch ( Exception e)
+            catch (Exception e)
             {
-                Trace.WriteLine(e.ToString());
+                Trace.WriteLine("IOFile.cs : " + e.ToString());
             }
         }
 
@@ -63,13 +58,13 @@ namespace PizzeriaDOM.src.functions
                 }
                 else
                 {
-                    Trace.WriteLine($"Could not load {fileName}");
+                    Trace.WriteLine($"IOFile.cs : Could not load {fileName}");
                     return new List<T>();
                 }
-            } 
-            catch ( Exception e )
+            }
+            catch (Exception e)
             {
-                Trace.WriteLine(e.ToString());
+                Trace.WriteLine("IOFile.cs : " + e.ToString());
                 return new List<T>();
             }
         }
@@ -83,22 +78,20 @@ namespace PizzeriaDOM.src.functions
             {
                 string ObjectJson = File.ReadAllText(path);
                 List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(ObjectJson);
-                return orders.Count;
+                return orders.Count + 1;
             }
             else
             {
                 return 1;
             }
         }
-
-
         public static void updateDeliveryManDisponibility(DeliveryMan deliveryMan, bool available)
         {
             List<DeliveryMan> deliveryMen = ReadFromFile<DeliveryMan>("DeliveryMan");
 
             DeliveryMan deliveryManToUpdate = deliveryMen.FirstOrDefault(man => man.ID == deliveryMan.ID);
 
-            if (deliveryManToUpdate != null) 
+            if (deliveryManToUpdate != null)
             {
                 deliveryManToUpdate.Available = available;
                 string updatedList = JsonConvert.SerializeObject(deliveryMen);
@@ -106,7 +99,7 @@ namespace PizzeriaDOM.src.functions
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "DeliveryMan.json");
                 File.WriteAllText(path, updatedList);
             }
-            
+
 
         }
 
@@ -116,6 +109,7 @@ namespace PizzeriaDOM.src.functions
             DeliveryMan deliveryMan = deliveryMen.FirstOrDefault(man => man.Available == true);
             return deliveryMan;
         }
+
 
         public static void updateOrder(Order order, string state)
         {
@@ -135,7 +129,6 @@ namespace PizzeriaDOM.src.functions
             {
                 return;
             }
-
         }
 
         public static void clerkUpdateManagedOrder(Clerk clerk)
@@ -165,6 +158,25 @@ namespace PizzeriaDOM.src.functions
                 string workingDirectory = Directory.GetCurrentDirectory();
                 string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "DeliveryMan.json");
                 File.WriteAllText(path, updatedList);
+            }
+        }
+
+        public static void assignDeliveryMan(DeliveryMan deliveryMan, Order order)
+        {
+            List<Order> orderFromFile = ReadFromFile<Order>("Orders");
+            Order orderToUpdate = orderFromFile.FirstOrDefault(e => e.ID == order.ID);
+
+            if (orderToUpdate != null)
+            {
+                orderToUpdate.DeliveryMan = deliveryMan;
+                string updatedList = JsonConvert.SerializeObject(orderFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Orders.json");
+                File.WriteAllText(path, updatedList);
+            }
+            else
+            {
+                return;
             }
         }
     }

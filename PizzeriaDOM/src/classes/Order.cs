@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PizzeriaDOM.src.classes
 {
@@ -16,6 +14,7 @@ namespace PizzeriaDOM.src.classes
         private Customer _customer;
         private int _kitchenCountdown = 3;
         private Clerk _clerk;
+        private DeliveryMan _deliveryMan;
 
 
         //DÃ©finir un certain prix selon type / size pizza
@@ -47,6 +46,12 @@ namespace PizzeriaDOM.src.classes
         {
             get => _clerk;
             set => _clerk = value;
+        }
+
+        public DeliveryMan DeliveryMan
+        {
+            get => _deliveryMan;
+            set => _deliveryMan = value;
         }
 
 
@@ -91,12 +96,14 @@ namespace PizzeriaDOM.src.classes
             private string _size;
             private string _name;
             private double _price;
+            private int _quantity;
 
-            public Product(string size, string type, double price)
+            public Product(string size, string type, double price, int quantity)
             {
                 this._size = size;
                 this._name = type;
                 this._price = price;
+                this._quantity = quantity;
             }
 
             public string Size
@@ -115,6 +122,12 @@ namespace PizzeriaDOM.src.classes
             {
                 get => _price;
                 set => _price = value;
+            }
+
+            public int Quantity
+            {
+                get => _quantity;
+                set => _quantity = value;
             }
 
         }

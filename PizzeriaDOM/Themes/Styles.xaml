@@ -15,12 +15,20 @@
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
+    <Style x:Key="SubTitle" TargetType="Label">
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="23" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
     <Style x:Key="Label" TargetType="Label">
         <Setter Property="Foreground" Value="#F79256"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
-    
+
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -30,7 +38,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- Input text box-->
     <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
     <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
@@ -86,7 +94,7 @@
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-    
+
 
     <Style x:Key="BaseButton" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -125,8 +133,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
+
+
     <!-- Style d'un bouton de nav non séléctionné-->
     <Style x:Key="NavButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -162,7 +170,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-   
+
     <DataTemplate x:Key="BoissonTemplate">
         <StackPanel Orientation="Horizontal">
             <RadioButton GroupName="BoissonGroup" Content="Coca" />
@@ -176,7 +184,7 @@
             <RadioButton GroupName="PizzaGroup" Content="Viande" />
         </StackPanel>
     </DataTemplate>
-    
+
     <!--Style for ListView-->
     <Style x:Key="ListViewTemplate" TargetType="{x:Type ListView}">
         <Setter Property="Margin" Value="10" />
@@ -195,18 +203,64 @@
     <Style x:Key="MessageConsoleTemplate" TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    
+
     <!--Style for the label in OrderInformations.xaml-->
     <Style x:Key="OrderLabelTemplate" TargetType="{x:Type Label}">
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="5" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="20" />
     </Style>
-    
+
     <!--Style for the TextBlock in OrderInformations.xaml-->
     <Style x:Key="OrderTextBlockTemplate" TargetType="{x:Type TextBlock}">
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="5" />
         <Setter Property="FontSize" Value="20" />
     </Style>
+    
+    
+    <!--TRASH-->
+    <Style x:Key="TrashButton" TargetType="{x:Type Button}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Cursor="Hand" x:Name="border" CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <ContentPresenter Margin="0 0 3 1.8" x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#A3A3A3"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#A3A3A3"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="Transparent"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="Transparent"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Style for the TextBlock in Statistics.xaml-->
+    <Style x:Key="StatDisplay" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+
 </ResourceDictionary>

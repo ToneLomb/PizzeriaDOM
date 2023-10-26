@@ -1,54 +1,54 @@
 [
-    {
-        "size": "S",
-        "name": "Margherita",
-        "price": 8
-    },
-    {
-        "size": "S",
-        "name": "Four Cheese",
-        "price": 9
-    },
-    {
-        "size": "S",
-        "name": "Pepperoni",
-        "price": 9.5
-    },
-    {
-        "size": "S",
-        "name": "Hawaiian",
-        "price": 9
-    },
-    {
-        "size": "S",
-        "name": "Capricciosa",
-        "price": 8.5
-    },
-    {
-        "size": "S",
-        "name": "Diavola",
-        "price": 10
-    },
-    {
-        "size": "S",
-        "name": "Mushroom",
-        "price": 9
-    },
-    {
-        "size": "S",
-        "name": "Marinara",
-        "price": 9.5
-    },
-    {
-        "size": "S",
-        "name": "Neapolitan",
-        "price": 9
-    },
-    {
-        "size": "S",
-        "name": "Ham and Mushroom",
-        "price": 9
-    }
+  {
+    "size": "S",
+    "name": "Margherita",
+    "price": 8
+  },
+  {
+    "size": "S",
+    "name": "Four Cheese",
+    "price": 9
+  },
+  {
+    "size": "S",
+    "name": "Pepperoni",
+    "price": 9.5
+  },
+  {
+    "size": "S",
+    "name": "Hawaiian",
+    "price": 9
+  },
+  {
+    "size": "S",
+    "name": "Capricciosa",
+    "price": 8.5
+  },
+  {
+    "size": "S",
+    "name": "Diavola",
+    "price": 10
+  },
+  {
+    "size": "S",
+    "name": "Mushroom",
+    "price": 9
+  },
+  {
+    "size": "S",
+    "name": "Marinara",
+    "price": 9.5
+  },
+  {
+    "size": "S",
+    "name": "Neapolitan",
+    "price": 9
+  },
+  {
+    "size": "S",
+    "name": "Ham and Mushroom",
+    "price": 9
+  }
 
 
 

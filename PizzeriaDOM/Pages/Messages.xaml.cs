@@ -1,36 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace PizzeriaDOM.Pages
 {
-    /// <summary>
-    /// Logique d'interaction pour Messages.xaml
-    /// </summary>
     public partial class Messages : UserControl
     {
         static Dictionary<int, string> KitchenMessage = new Dictionary<int, string>();
-        static List<String> DeliveryMessage = new List<String>();
         static List<Order> WaitingDelivery = new List<Order>();
 
         private DispatcherTimer kitchenTimer;
@@ -38,7 +23,6 @@ namespace PizzeriaDOM.Pages
         {
             InitializeComponent();
         }
-
         public void LoadMessages()
         {
             var factory = new ConnectionFactory { HostName = "localhost" };
@@ -47,6 +31,7 @@ namespace PizzeriaDOM.Pages
             Customer(connection);
             Kitchen(connection);
             Clerk(connection);
+            Delivery(connection);
         }
 
         private void Security(IConnection connection)
@@ -63,7 +48,6 @@ namespace PizzeriaDOM.Pages
                                      consumer: consumerSecurity);
             }
         }
-
         private void Customer(IConnection connection)
         {
             using (var channelCustomer = connection.CreateModel())
@@ -129,9 +113,7 @@ namespace PizzeriaDOM.Pages
                         kitchenTimer.Start();
                     }));
                 };
-
                 channelKitchen.BasicConsume(queue: "kitchen", autoAck: true, consumer: consumerKitchen);
-
                 DisplayKitchenMessage();
             }
         }
@@ -173,18 +155,27 @@ namespace PizzeriaDOM.Pages
             using (var channelClerk = connection.CreateModel())
             {
 
-                Trace.WriteLine("Clerk func");
-
                 var consumerClerk = new EventingBasicConsumer(channelClerk);
                 consumerClerk.Received += (model, ea) =>
                 {
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
-                    Dispatcher.BeginInvoke(new Action(() =>
+                    if(ea.RoutingKey == "Ordered")
                     {
-                        ClerkConsole.Text += order.ToString();
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            ClerkConsole.Text += "Order No : " + order.ID + " taken by clerk No " + order.Clerk.ID + "\n";
                     }));
+                    }else if (ea.RoutingKey == "Delivered")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            ClerkConsole.Text += "Order No : " + order.ID + " has been closed successfully\n";
+                        }));
+                        
+                    }
+                    
 
                 };
 
@@ -206,21 +197,33 @@ namespace PizzeriaDOM.Pages
                     var message = Encoding.UTF8.GetString(body);
                     Order order = JsonConvert.DeserializeObject<Order>(message);
 
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {           
-                        string msg = "Order No " + order.ID + " received, waiting for delivery\n";
-                        DeliveryConsole.Text += msg;
-                        WaitingDelivery.Add(order);
-                        Task<string> deliveryResult = TryDeliver(order); // Attendre le résultat de TryDeliver
-                        deliveryResult.ContinueWith(taskResult =>
-                        {
-                            string result = taskResult.Result;
-                            Dispatcher.BeginInvoke(new Action(() =>
+                    if(ea.RoutingKey == "delivery")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {           
+                            string msg = "Order No " + order.ID + " received, waiting for delivery\n";
+                            DeliveryConsole.Text += msg;
+                            WaitingDelivery.Add(order);
+                            Task<string> deliveryResult = TryDeliver(order); // Attendre le résultat de TryDeliver
+                            deliveryResult.ContinueWith(taskResult =>
                             {
-                                DeliveryConsole.Text += result +"\n";
-                            } ));
-                        });
-                    }));
+                                string result = taskResult.Result;
+                                Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    DeliveryConsole.Text += result + "\n";
+                                    LoadMessages();
+                                }));
+                            });
+                        }));
+                    }else if (ea.RoutingKey == "Delivered")
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            string msg = "DeliveryMan No " + order.DeliveryMan.ID + " earned " + Math.Round(0.1 * order.PriceOrder, 2) + " €\n";
+                            DeliveryConsole.Text += msg;
+                        }));
+                    }
+                    
                 };
 
                 channelDelivery.BasicConsume(queue: "delivery",
@@ -232,21 +235,27 @@ namespace PizzeriaDOM.Pages
 
         private async Task<string> TryDeliver(Order order)
         {
-            Trace.WriteLine("Je suis order numéro : " + order.ID);
             string orderStatus = string.Empty;
+            
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3);
             timer.Tick += async (sender, e) =>
             {
-                Trace.WriteLine("Check d'un delivery dispo pour order " + order.ID);
+                Trace.WriteLine("Messages.xaml.cs : Check d'un deliveryMan dispo pour livrer la commande : " + order.ID);
                 DeliveryMan deliveryMan = IOFile.GetDeliveryMan();
                 if (deliveryMan != null)
                 {
                     timer.Stop();
-                    Trace.WriteLine("Delivery trouvé");
+
+                    IOFile.assignDeliveryMan(deliveryMan, order);
+                    
+                    order.DeliveryMan = deliveryMan;
+                    IOFile.updateOrder(order, "In delivery");
+                    
+                    Trace.WriteLine("Messages.xaml.cs : Delivery trouvé");
                     await Deliver(order, deliveryMan);
                     orderStatus = "Order No " + order.ID + " delivered\n";
-                    Trace.WriteLine("Statut actualisé");
+                    Trace.WriteLine("Messages.xaml.cs : Statut de la commande actualisé");
 
                 }
             };
@@ -257,7 +266,7 @@ namespace PizzeriaDOM.Pages
 
             if (WaitingDelivery.Contains(order))
             {
-                orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned\n";
+                orderStatus = "Order No " + order.ID + " could not be delivered in time. Abandonned";
                 WaitingDelivery.Remove(order);
                 IOFile.updateOrder(order, "Abandonned");
                 timer.Stop();
@@ -279,10 +288,26 @@ namespace PizzeriaDOM.Pages
             IOFile.updateDeliveryManDisponibility(deliveryMan, false);
             WaitingDelivery.Remove(order);
             await Task.Delay(10000);
-            Trace.WriteLine("Fin livraison");
+            Trace.WriteLine("Messages.xaml.cs : Fin livraison");
+            
             IOFile.updateOrder(order, "Closed");
             IOFile.updateDeliveryManDisponibility(deliveryMan, true);
             IOFile.deliveryManUpdateManageOrder(deliveryMan);
+
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = factory.CreateConnection();
+            using var channel = connection.CreateModel();
+            channel.ExchangeDeclare("Topic", type: ExchangeType.Topic);
+
+            string serializedObject = JsonConvert.SerializeObject(order);
+            var body = Encoding.UTF8.GetBytes(serializedObject);
+
+            channel.BasicPublish(exchange: "Topic",
+                                 routingKey: "Delivered",
+                                 basicProperties: null,
+                                 body: body);
+
+            
         }
     }
 }

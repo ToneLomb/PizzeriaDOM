@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO.Packaging;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Newtonsoft.Json;
 using PizzeriaDOM.src.classes;
 using PizzeriaDOM.src.functions;
@@ -24,11 +15,6 @@ using RabbitMQ.Client;
 
 namespace PizzeriaDOM.Pages
 {
-    /// <summary>
-    /// Logique d'interaction pour TakeOrder.xaml
-    /// </summary>
-        
-    /// 
     public partial class TakeOrder : UserControl
     {
         //La liste de panels à afficher
@@ -52,7 +38,7 @@ namespace PizzeriaDOM.Pages
         public Customer Customer
         {
             get => customer;
-            set => customer = value;          
+            set => customer = value;
         }
 
         public Clerk Clerk
@@ -161,12 +147,12 @@ namespace PizzeriaDOM.Pages
             //On récupère également le ProductPanel associé et en fonction du choix du client on charge la BDD associée aux produits
             ProductPanel productPanel = (ProductPanel)parentStackPanel.DataContext;
             string databaseToLoad = productPanel.IsPizzaSelected ? "Pizza" : "Drinks";
- 
+
             List<Order.Product> suggestions = IOFile.ReadFromFile<Order.Product>(databaseToLoad);
 
             //On récupère les noms des Produits
             List<string> productsName = new List<string>();
-            foreach(Order.Product product in suggestions)
+            foreach (Order.Product product in suggestions)
             {
                 productsName.Add(product.Name);
             }
@@ -212,7 +198,8 @@ namespace PizzeriaDOM.Pages
 
             TextBlock quantity = (TextBlock)grandParentStackPanel.FindName("Quantity");
             int value = int.Parse(quantity.Text);
-            if (value > 1) {
+            if (value > 1)
+            {
                 value--;
                 product.quantity = value;
             }
@@ -237,11 +224,17 @@ namespace PizzeriaDOM.Pages
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            if(customer == null)
+            if (clerk == null)
+            {
+                Error.Content = "You must specify a clerk taking the call";
+                return;
+            }
+            else if (customer == null)
             {
                 Error.Content = "There is no customer to take an order";
                 return;
-            }else if (Products.Count == 0) 
+            }
+            else if (Products.Count == 0)
             {
                 Error.Content = "You must add products in the order";
                 return;
@@ -257,25 +250,26 @@ namespace PizzeriaDOM.Pages
                 {
                     List<Order.Product> products = new List<Order.Product>();
                     double totalPrice = 0;
-                    foreach(var product in Products)
+                    foreach (var product in Products)
                     {
                         string size = product.size;
                         string productName = product.selectedProduct;
                         double price = 0;
+                        int quantity = product.quantity;
                         if (product.IsBoissonSelected)
                         {
-                            price = tools.getPrice(productName,"Drinks",size);
+                            price = tools.getPrice(productName, "Drinks", size);
                         }
-                        else {
-                            price = tools.getPrice(productName, "Pizza",size);
+                        else
+                        {
+                            price = tools.getPrice(productName, "Pizza", size);
                         }
-                        products.Add(new Order.Product(size,productName,price));
+                        products.Add(new Order.Product(size, productName, price, quantity));
                         totalPrice += price * product.quantity;
                     }
 
-
                     int orderID = IOFile.countOrders();
-                    Order order = new Order(orderID,customer,totalPrice,"In preparation",DateTime.Now,products, clerk);
+                    Order order = new Order(orderID, customer, totalPrice, "In preparation", DateTime.Now, products, clerk);
                     List<Object> orders = new List<Object>();
                     orders.Add(order);
                     IOFile.WriteInFile(orders, "Orders");
@@ -284,11 +278,11 @@ namespace PizzeriaDOM.Pages
                     messages.LoadMessages();
 
                     ResetDisplay();
-                    
+
                 }
-                
+
             }
-           
+
         }
 
         private void sendOrder(Order order)
@@ -301,25 +295,32 @@ namespace PizzeriaDOM.Pages
 
             channel.QueueBind(queue: "kitchen",
                           exchange: "Topic",
-                          routingKey: "kitchen.*.*");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "clerk",
                           exchange: "Topic",
-                          routingKey: "*.clerk.*");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "customer",
                           exchange: "Topic",
-                          routingKey: "*.*.customer");
+                          routingKey: "Ordered");
             channel.QueueBind(queue: "security",
                           exchange: "Topic",
-                          routingKey: "*.*.*");
+                          routingKey: "Ordered");
+
+            channel.QueueBind(queue: "delivery",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
+            channel.QueueBind(queue: "clerk",
+                          exchange: "Topic",
+                          routingKey: "Delivered");
 
             string serializedObject = JsonConvert.SerializeObject(order);
             var body = Encoding.UTF8.GetBytes(serializedObject);
 
             channel.BasicPublish(exchange: "Topic",
-                                 routingKey: "kitchen.clerk.customer",
+                                 routingKey: "Ordered",
                                  basicProperties: null,
                                  body: body);
-            Trace.WriteLine("Message envoyé");
+            Trace.WriteLine("TakeOrder.xaml.cs : Message envoyé");
         }
 
         private void Size_Click(object sender, RoutedEventArgs e)
@@ -348,7 +349,7 @@ namespace PizzeriaDOM.Pages
         {
             ListBox list = choseClerkList;
 
-            List<Clerk> clerkList= IOFile.ReadFromFile<Clerk>("Clerk");
+            List<Clerk> clerkList = IOFile.ReadFromFile<Clerk>("Clerk");
 
             List<string> clerkNames = new List<string>();
 
@@ -365,13 +366,18 @@ namespace PizzeriaDOM.Pages
         private void ResetDisplay()
         {
             customer = null;
-            CustomerName.Content = "";
+            CustomerName.Content = string.Empty;
             Products.Clear();
             productIdCounter = 1;
+            Error.Content = string.Empty;
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            ResetDisplay();
         }
     }
-            
+
 }
 
-        
-  
+
