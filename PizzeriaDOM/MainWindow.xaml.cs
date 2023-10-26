@@ -91,5 +91,11 @@ namespace PizzeriaDOM
             CC.Content = new PizzeriaDOM.Pages.Statistics();
             ToggleButtonClick(Statistics);
         }
+
+        private void Customer_Click(object sender, RoutedEventArgs e)
+        {
+            CC.Content = new PizzeriaDOM.Pages.CustomerPage();
+            ToggleButtonClick(Customer);
+        }
     }
 }

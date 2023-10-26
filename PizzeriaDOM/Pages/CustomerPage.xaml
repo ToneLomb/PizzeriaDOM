@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="PizzeriaDOM.Pages.CustomerPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PizzeriaDOM.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="650">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="#45455F">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Style="{DynamicResource PageTitle}" Grid.Row="0" Content="CUSTOMERS" HorizontalAlignment="Center" />
+
+        <ListView Style="{DynamicResource ListViewTemplate}" Grid.Row="1" Name="CustomerListView" >
+            <ListView.Margin>
+                <Thickness Left="10" Bottom="10" Right="10" />
+            </ListView.Margin>
+            <ListView.View>
+                <GridView>
+                    <!-- Define columns for your data -->
+                    <GridViewColumn Header="Surname" DisplayMemberBinding="{Binding Surname}">
+                        <!--Link event handler-->
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    <GridViewColumn Header="FirstName" DisplayMemberBinding="{Binding FirstName}">
+                        <!--Link event handler-->
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Address" DisplayMemberBinding="{Binding Address}">
+                        <!--Link event handler-->
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    <GridViewColumn Header="TelephoneNumber" DisplayMemberBinding="{Binding TelephoneNumber}" />
+                    <GridViewColumn Header="DateFirstOrder" DisplayMemberBinding="{Binding DateFirstOrder}" />
+                    <GridViewColumn Header="PurchaseNumber" DisplayMemberBinding="{Binding PurchaseNumber}">
+                        <!--Link event handler-->
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <EventSetter Event="Click" Handler="GridViewColumnHeader_Click" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>
