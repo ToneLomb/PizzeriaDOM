@@ -44,51 +44,52 @@
         </Button>
 
         <!--Liste de tous les produits qui seront affichés dynamiquement -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200" Width="600" Margin="25,181,25,69">
+            <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="Auto" Width="600" Padding="0 0 0 0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="410" Margin="0 5 0 0" HorizontalAlignment="Left">
+                            <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
 
-        <ItemsControl Name="productsList" ItemsSource="{Binding Products}" Height="200" Width="600" Margin="0 100 0 0" Padding="0 0 0 0">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border CornerRadius="8" Background="#A7B8DC" Height="30" Width="410" Margin="0 5 0 0" HorizontalAlignment="Left"> 
-                    <StackPanel Name="productPanel" Orientation="Horizontal" Height="30" Width="550" Visibility="Visible">
+                                <!-- Contenu de chaque StackPanel -->
+                                <TextBlock Margin="10 0 10 0" VerticalAlignment="Center" Text="{Binding ID}" />
 
-                        <!-- Contenu de chaque StackPanel -->
-                        <TextBlock Margin="10 0 10 0" VerticalAlignment="Center" Text="{Binding ID}" />
-                        
-                        <!--Boisson ou pizza-->
-                        <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
-                        </RadioButton>
-                        <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0" Checked="Pizza_Checked" Unchecked="Pizza_UnChecked">
+                                <!--Boisson ou pizza-->
+                                <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Boisson" Content="Boisson" Height="20" Width="45" HorizontalAlignment="Center" Checked="Boisson_Checked" Unchecked="Boisson_UnChecked">
+                                </RadioButton>
+                                <RadioButton GroupName="{Binding productName}" Style="{DynamicResource ProductSizeButton}" Name="Pizza" Content="Pizza" Height="20" Width="30" HorizontalAlignment="Center" Margin="5 0 10 0" Checked="Pizza_Checked" Unchecked="Pizza_UnChecked">
 
-                        </RadioButton>
+                                </RadioButton>
 
 
-                        <!--Choix de la taille des produits-->
-                        <RadioButton GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
-                        </RadioButton>
-                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5" Click="Size_Click">
-                        </RadioButton>
-                        <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
-                        </RadioButton>
-                        
-                        <!-- SearchBox -->
-                        <TextBox Style="{DynamicResource SearchBox}" Text="Search ..." x:Name="SearchBox" Width="150" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" KeyUp="SearchBox_KeyUp"></TextBox>
-                        <!-- Création d'une popup qui se met en dessous de la textbox -->
-                        <Popup x:Name="suggestionPopup" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False">
-                            <ListBox x:Name="suggestionList" SelectionChanged="suggestionList_SelectionChanged"/>
-                        </Popup>
+                                <!--Choix de la taille des produits-->
+                                <RadioButton GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Small" Content="S" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
+                                </RadioButton>
+                                <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Medium" Content="M" Height="20" Width="15" HorizontalAlignment="Center" Margin="5" Click="Size_Click">
+                                </RadioButton>
+                                <RadioButton  GroupName="{Binding sizeGroup}" Style="{DynamicResource ProductSizeButton}" Name="Large" Content="L" Height="20" Width="15" HorizontalAlignment="Center" Click="Size_Click">
+                                </RadioButton>
 
-                        <TextBlock Padding="0 3 0 0" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" x:Name="Quantity" Width="20" Height="20">1</TextBlock>
-                        <StackPanel Orientation="Horizontal" Width="100">
-                            <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
-                            <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
-                        </StackPanel>
-                        
+                                <!-- SearchBox -->
+                                <TextBox Style="{DynamicResource SearchBox}" Text="Search ..." x:Name="SearchBox" Width="150" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" KeyUp="SearchBox_KeyUp"></TextBox>
+                                <!-- Création d'une popup qui se met en dessous de la textbox -->
+                                <Popup x:Name="suggestionPopup" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False">
+                                    <ListBox x:Name="suggestionList" SelectionChanged="suggestionList_SelectionChanged"/>
+                                </Popup>
 
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                                <TextBlock Padding="0 3 0 0" FontWeight="Bold" TextAlignment="Center" VerticalAlignment="Center" x:Name="Quantity" Width="20" Height="20">1</TextBlock>
+                                <StackPanel Orientation="Horizontal" Width="100">
+                                    <Button Style ="{DynamicResource QuantityButton}" Name="Increment" Click="Increment_Click">+</Button>
+                                    <Button Style ="{DynamicResource QuantityButton}" Name="Decrease" Click="Decrease_Click">-</Button>
+                                </StackPanel>
+
+
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
         <TextBlock Style ="{DynamicResource FontStyle}" x:Name="CustomerFound" HorizontalAlignment="Center" ></TextBlock>
         <Label x:Name="Error" Foreground="Red" Height="30" Width="400" Margin="225,140,25,280"></Label>

@@ -179,5 +179,21 @@ namespace PizzeriaDOM.src.functions
                 return;
             }
         }
+
+        public static void updateNumberOfOrderCustomer(Customer customer)
+        {
+            List<Customer> customersFromFile = ReadFromFile<Customer>("Customer");
+            Customer customerToUpdate = customersFromFile.FirstOrDefault(e => e.TelephoneNumber == customer.TelephoneNumber);
+
+            if (customerToUpdate != null)
+            {
+                customerToUpdate.PurchaseNumber += 1;
+                string updatedList = JsonConvert.SerializeObject(customersFromFile);
+                string workingDirectory = Directory.GetCurrentDirectory();
+                string path = System.IO.Path.Combine(workingDirectory, "..\\..\\..\\db", "Clerk.json");
+                File.WriteAllText(path, updatedList);
+            }
+        }
+
     }
 }

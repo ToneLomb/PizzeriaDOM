@@ -17,6 +17,7 @@ namespace PizzeriaDOM.Pages
         public Customer NewCustomer { get; private set; }
         private void Register_Click(object sender, RoutedEventArgs e)
         {
+            isEmpty = false;
             //List des champs à vérifier
             List<TextBox> fields = new List<TextBox>
             {
