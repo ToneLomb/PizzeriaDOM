@@ -36,8 +36,8 @@
         </Border>
         <Border Height="80" Margin="0,230,0,154">
             <StackPanel HorizontalAlignment="Center">
-                <Label Content="Adress" Width="240" FontSize="16" Foreground="#F79256" FontWeight="SemiBold"/>
-                <TextBox x:Name ="Adress" Style="{DynamicResource TextBoxInput}" Height="30"/>
+                <Label Content="Address" Width="240" FontSize="16" Foreground="#F79256" FontWeight="SemiBold"/>
+                <TextBox x:Name ="Address" Style="{DynamicResource TextBoxInput}" Height="30"/>
             </StackPanel>
         </Border>
         <Border  Height="80" Margin="0,310,0,74">

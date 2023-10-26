@@ -33,7 +33,7 @@ namespace PizzeriaDOM.src.classes
             set => _firstName = value;
         }
 
-        public string Adress
+        public string Address
         {
             get => _address;
             set => _address = value;
@@ -60,7 +60,7 @@ namespace PizzeriaDOM.src.classes
         {
             return $"Customer Information:\n" +
                    $"Name: {FirstName} {Surname}\n" +
-                   $"Address: {Adress}\n" +
+                   $"Address: {Address}\n" +
                    $"Telephone Number: {TelephoneNumber}\n" +
                    $"Date of First Order: {DateFirstOrder}\n" +
                    $"Purchase Number: {PurchaseNumber}";

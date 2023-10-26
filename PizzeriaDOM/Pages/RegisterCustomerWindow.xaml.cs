@@ -22,7 +22,7 @@ namespace PizzeriaDOM.Pages
             {
                 Surname,
                 Firstname,
-                Adress,
+                Address,
                 Phone
             };
             
@@ -44,7 +44,7 @@ namespace PizzeriaDOM.Pages
             }
             else //Sinon on créer le customer, l'ajoute dans une liste pour pouvoir l'écrire dans notre fichier BDD, et on ferme la popup
             {
-                Customer customer = new Customer(Surname.Text, Firstname.Text, Adress.Text, Phone.Text, DateTime.Now); 
+                Customer customer = new Customer(Surname.Text, Firstname.Text, Address.Text, Phone.Text, DateTime.Now); 
                 NewCustomer = customer;
                 List<Object> newCustomer = new List<Object>();
                 newCustomer.Add(customer);
